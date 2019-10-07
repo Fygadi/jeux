@@ -16,7 +16,7 @@ void setup()
 {
   hauteurCase = height/nombreCases;
   
-  frameRate(60);
+  frameRate(20);
   fullScreen();
   
   rectMode(CENTER);
