@@ -1,4 +1,4 @@
-boolean DEBUG = true;
+boolean DEBUG = false;
 
 int joueur = 2;
 int nombreCases = 8;
@@ -16,7 +16,7 @@ void setup()
 {
   hauteurCase = height/nombreCases;
   
-  frameRate(20);
+  frameRate(60);
   fullScreen();
   
   rectMode(CENTER);
@@ -41,12 +41,20 @@ void draw()
 
 void initialisation()
 {
-  videplateau();
+  videplateau();  
+  joueur = 2;
   
-  MatricePieces[3][3] = 1;
-  MatricePieces[4][4] = 1;
-  MatricePieces[4][3] = 2;
-  MatricePieces[3][4] = 2;
+  if (nombreCases%2 == 0)
+  {
+    MatricePieces[3][3] = 1;
+    MatricePieces[4][4] = 1;
+    MatricePieces[4][3] = 2;
+    MatricePieces[3][4] = 2;
+  }
+  else
+  {
+    
+  }
 }
 
 
@@ -83,7 +91,7 @@ void dessinCases()
 
 void dessinPieces()
 {
-  stroke(0);
+  noStroke();
   {
   for (int i = 0; i < nombreCases; i = i + 1)
   {
@@ -707,15 +715,24 @@ void test()
 //dessin le texte du nombre de pieces de chaque couleur 
 void dessinPiecesChaqueCouleur()
 {
-  textAlign(LEFT);
-  textSize(35);
+  fill(255);
+  ellipse (hauteurCase - (height/30), hauteurCase - (height/30), hauteurCase - (height/30), hauteurCase - (height/30));
+  
+  fill(0);
+  ellipse (hauteurCase - (height/30), (hauteurCase - (height/30))*2.5, hauteurCase - (height/30), hauteurCase - (height/30));
+  
+  textAlign(CENTER, DOWN);
+  textSize(height/20);
   fill(255, 0, 0);
   int[] x={0,0,0};
 
   x = nombrePiecesChaqueCouleur();
  
- text("nombre blanc = " + x[2], 30, height/8); //<>//
- text("nombre noire = " + x[1], 30, height/8 + 60);
+ text(x[2], (hauteurCase - (height/30)) * 2, (height/8)); //<>//
+ text(x[1], (hauteurCase - (height/30)) * 2, (height/8) *2);
+ 
+ //text("nombre blanc = " + x[2], 10, height/8);
+ //text("nombre noire = " + x[1], 10, height/8 + 60);
  }
 
 //calcule le nombre de pieces de chaque couleur
