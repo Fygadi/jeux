@@ -2,7 +2,7 @@ boolean DEBUG = false;
 
 int joueur = 2;
 int nombreCases = 8;
-int hauteurCase;
+float hauteurCase;
 
 int[] dernierCoup = new int[2];
 
@@ -14,7 +14,7 @@ int[][] MatricePieces = new int[nombreCases][nombreCases];
 
 void setup()
 {
-  hauteurCase = height/nombreCases;
+  hauteurCase = (float) height/nombreCases;
   
   frameRate(60);
   fullScreen();
