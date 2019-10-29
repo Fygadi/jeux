@@ -6,7 +6,7 @@ int[][] MatricePieces = new int[nombreCases][nombreCases];
 
 void setup()
 {
-  frameRate(90);
+  frameRate(60);
   fullScreen();
   
   hauteurCase = (float) height/nombreCases;
@@ -18,9 +18,7 @@ void setup()
 
 enum CouleurPieces
 {
-  Vide,
-  Blanc,
-  Noir
+  Vide, Blanc, Noir
 }
 
 
@@ -30,6 +28,19 @@ void draw()
   background(200);
   dessinCases();
   dessinPieces();
+}
+
+
+
+void videplateau()
+{
+  for (int i = 0; i < nombreCases; i = i+1 )
+  {
+    for (int j = 0; j < nombreCases; j = j+1 )
+    {
+      MatricePieces[i][j] = 0;
+    }
+  }
 }
 
 
@@ -77,15 +88,12 @@ void dessinPieces()
 
 
 
-void videplateau()
+void calculeCaseClick()
 {
-  for (int i = 0; i < nombreCases; i = i+1 )
-  {
-    for (int j = 0; j < nombreCases; j = j+1 )
-    {
-      MatricePieces[i][j] = CouleurPieces.Vide;
-    }
-  }
+  int posMouseX = mouseX;
+  int posMouseY = mouseY;
+  
+  
 }
 
 
