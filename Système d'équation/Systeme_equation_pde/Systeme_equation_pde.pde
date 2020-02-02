@@ -1,9 +1,9 @@
 int s;
 int Nc = 10;
 
-float tauxV;
+float a, float x, float b;
 float x;
-float ordone_a_origine;
+float b;
 
 void setup(){
   size(900, 600);
@@ -33,15 +33,19 @@ void clean(){
     line(0, height/2 + i*s, width, height/2 + i*s);
     line(0, height/2 - i*s, width, height/2 - i*s);
   }
+  //dessine l'axe orizontal et vertical
   strokeWeight(2);
   stroke(axes);
+  //ligne orizontal 
   line(0, height/2, width, height/2);
+  //ligne vertical
   line(width/2, 0, width/2, height);
 }
 
 
 
-void fonction(){
+void fonction_lineaire(){
   float y;
-  y = tauxV * x + ordone_a_origine;
+  //dessin une fonction lineaire
+  y = a * x + b;
 }
