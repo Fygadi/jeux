@@ -1,4 +1,3 @@
-  
 int sizeC;
 int Nc = 10;
 
