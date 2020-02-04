@@ -22,16 +22,23 @@ void setup()
         Complex z = new Complex(x,y);
         Complex z0 = new Complex(x,y);
         stroke(0);
-        for(int k = 1; k < 15; k++)
+        color c = color(0, 0, 0);
+        int itt = 400; 
+        for(int k = 1; k < itt; k++)
         {
           z = z.multi(z);
           z = z.add(z0);
-          if(z.module() > 100)
+          if(z.module() > 4)
           {
-            stroke(255, k/5, 0);
-            k=15;
+            colorMode(HSB);
+            c = color((k*3+150)%255, 255, 255);
+            break;
           }
+          //if(z.real <= -4 || z.real >= 4 || z.img <= -4 || z.img >= 4){
+          //  break;
+          //}
         }
+        stroke(c);
         point(posX,posY);
         //println("posX=" + posX + "  PosY= " + posY);
       }
