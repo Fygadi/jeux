@@ -1,7 +1,6 @@
 int Nc = 10;
 float sizeC;
-float[][] PositionX = new float[Nc][Nc];
-float[][] PositionY = new float[Nc][Nc];
+float[][] Position = new float[Nc][Nc];
 
 
 
@@ -53,9 +52,10 @@ void draw_jsp()
 {
   for(int i = 0; i < Nc; i++){
     for(int j = 0; j < Nc; j++){
-    
-      color(255);
-      ellipse(PositionX[i][j], PositionY[i][j], 10, 10);
+      stroke(255, 0, 0);
+    line(Position[8][8],Position[8][8], Position[3][2],Position[3][2]);
+      //color(255);
+      //ellipse(PositionX[i][j], PositionY[i][j], 10, 10);
     }
   }
 }
