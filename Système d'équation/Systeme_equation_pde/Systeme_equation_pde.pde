@@ -1,5 +1,8 @@
 int Nc = 10;
 float sizeC;
+float[][] PositionX = new float[Nc][Nc];
+float[][] PositionY = new float[Nc][Nc];
+
 
 
 void settings() {
@@ -20,13 +23,18 @@ void setup() {
 
 void draw(){
   draw_plan_cartesien(); //<>//
+  calcule();
+  draw_jsp();
 } //<>//
 
 
 
 void draw_plan_cartesien(){
   //dessine les cases dans le background
-  for(int i = 0; i<= Nc; i++){
+  for(int i = 0; i < Nc; i++){
+    for(int j = 0; j < Nc; j++){
+      
+    }
     stroke(60);
     strokeWeight(0);
     line(0, sizeC*i, width, sizeC*i);
@@ -41,6 +49,25 @@ void draw_plan_cartesien(){
 
 
 
+void draw_jsp()
+{
+  for(int i = 0; i < Nc; i++){
+    for(int j = 0; j < Nc; j++){
+    
+      color(255);
+      ellipse(PositionX[i][j], PositionY[i][j], 10, 10);
+    }
+  }
+}
+
+
+
 void calcule(){
-  ; 
+  for(int i = 0; i < Nc; i++){
+    for(int j = 0; j < Nc; j++){
+      PositionX[i][j] = sizeC*i;
+      PositionY[i][j] = sizeC*j;
+      //println("PositionX[i][j] = " + PositionX[i][j] + "PositionY[i][j] = " + PositionY[i][j]);
+    }
+  }
 }
