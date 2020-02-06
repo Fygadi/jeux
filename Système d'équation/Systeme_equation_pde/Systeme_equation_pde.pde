@@ -65,8 +65,8 @@ void draw_jsp()
 void calcule(){
   for(int i = 0; i < Nc; i++){
     for(int j = 0; j < Nc; j++){
-      PositionX[i][j] = sizeC*i;
-      PositionY[i][j] = sizeC*j;
+      Position[i][j] = sizeC*i;
+      Position[i][j] = sizeC*j;
       //println("PositionX[i][j] = " + PositionX[i][j] + "PositionY[i][j] = " + PositionY[i][j]);
     }
   }
