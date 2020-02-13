@@ -48,29 +48,34 @@ void drawBackground(){
 
 
 void drawFonction(){
+  float y0 = calculateLinearFonction(0);
+  float y1 = calculateLinearFonction(5);
   stroke(255, 0, 0);
   strokeWeight(2.5);
-  float valueP1[] = calculateLinearFonction(0);
-  float valueP2[] = calculateLinearFonction(3);
-  line(valueP1[0], valueP1[1], valueP2[0], valueP2[1]);
-  //println("valueP1[0]" + valueP1[0]);
-  //println("valueP1[1]" + valueP1[1]);
-  //println("valueP2[0]" + valueP2[0]);
-  //println("valueP2[1]" + valueP2[1]);
+  line(width/2, sizeC*4y0+height/2, 887, sizeC*y1+height/2);
 }
 
 
 
-float[] calculateLinearFonction(float x){
-  println("x == " + x);
-  float a1 = -1, a2 = 4/5, b1 = -4, b2 = -4;
+float calculateLinearFonction(float x){
+  float a1 = -2, a2 = 4/5, b1 = -4, b2 = -4;
   float y;
-  x = ((b1-b2)/(a2-a1));
+  
   y = ((a1 * x) + b1);
-  
-  float[] value = {x, y};
-  //println("value X == "+ value[0] + "        value Y == " + value[1]);
-  //println(((a1*x + b1)));
-  
-  return value;
+  x = ((b1-b2)/(a2-a1));
+  println("x == " + x);
+  println("y == " + y);
+  return y;
+}
+
+
+
+//int position(int position){
+//  return position;
+//}
+
+
+
+void mousePressed(){
+  println(mouseY);
 }
