@@ -1,4 +1,4 @@
-int Nc = 15;
+int Nc = 8;
 float sizeC;
 
 
@@ -48,34 +48,29 @@ void drawBackground(){
 
 
 void drawFonction(){
-  float y0 = calculateLinearFonction(0);
-  float y1 = calculateLinearFonction(5);
+  float y0 = calculateLinearFonction(4.3);
+  float y1 = calculateLinearFonction(300);
+  float x0 = (sizeC*0)+(width/2);
+  float x1 = (sizeC*0.2)+(width/2);
   stroke(255, 0, 0);
   strokeWeight(2.5);
-  line(width/2, sizeC*4y0+height/2, 887, sizeC*y1+height/2);
+  line(x0, sizeC*-y0+height/2, x1, sizeC*-y1+height/2);
+  
+  strokeWeight(6);
+  //point(x0, height/2);
+  //point(x1, height/2);
+  //point(x0, y0);
+  //point(x1, y1);
 }
 
 
 
 float calculateLinearFonction(float x){
-  float a1 = -2, a2 = 4/5, b1 = -4, b2 = -4;
+  float a1 = 10, a2 = 12.5, b1 = -40, b2 = -85;
   float y;
-  
   y = ((a1 * x) + b1);
   x = ((b1-b2)/(a2-a1));
-  println("x == " + x);
-  println("y == " + y);
+   println("x == " + x);
+  //println("y == " + y);
   return y;
-}
-
-
-
-//int position(int position){
-//  return position;
-//}
-
-
-
-void mousePressed(){
-  println(mouseY);
 }
