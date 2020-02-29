@@ -2,17 +2,17 @@ int Nc = 12;
 float sizeC;
 
 
-void settings() {
+//void settings() {
   //int sizeX = (displayWidth * 70 /100), sizeY = (displayHeight * 70 / 100);
-  int size = (displayHeight * 80 / 100);
+  //int size = (displayHeight * 80 / 100);
   
-  size(size, size);
-}
+  //size(size, size);
+//}
 
 void setup() {
   background(0);
   sizeC = (float)height/Nc;
-  //fullScreen();
+  fullScreen();
 }
 
 
@@ -46,13 +46,11 @@ void drawBackground(){
 
 
 
-void drawFonction(){
-  float x = 1;
-  
-  float y0 = calculateLinearFonction(0);
-  float y1 = calculateLinearFonction(x);
-  float x0 = (sizeC*0)+(width/2);
-  float x1 = (sizeC*x)+(width/2);
+void drawFonction(){  
+  float y0 = calculateLinearFonction(-200);
+  float y1 = calculateLinearFonction(200);
+  float x0 = (sizeC*-200)+(width/2);
+  float x1 = (sizeC*200 )+(width/2);
   stroke(255, 0, 0);
   strokeWeight(2.5);
   line(x0, sizeC*-y0+height/2, x1, sizeC*-y1+height/2);
