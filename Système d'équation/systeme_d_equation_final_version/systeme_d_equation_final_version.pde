@@ -1,18 +1,17 @@
-float minValueX;
-float minValueY;
+float x, y;
+float a1 = 120, b1 = 30;
+float a2 = 60, b2 = 10;
 
 void setup(){
+  fullScreen();
+  
+  println("a1*x+b ==" + a1*x+b1);
 }
 
 
-float[] Intersection(){
-  float position[] = new float[2];
-  float b1, b2, a1, a2;
-  
-  position[0] = ((b1-b2)/(a2-a1));
-  position[1] = ((a1 * position[0]) + b1);
-  
-  return position;
+
+void draw(){
+  draw_line(); 
 }
 
 
@@ -28,6 +27,25 @@ void draw_line(){
 }
 
 
+
+float[] Position_intersection(){
+  float intersection[] = new float[1];
+  
+  intersection[0] = ((b1-b2)/(a2-a1));
+  intersection[1] = ((a1 * intersection[0]) + b1);
+  
+  return intersection;
+}
+
+
+
+float linearfonction(int a, int x, int b){
+  float y = a*x+b;
+  return y;
+}
+ 
+
+
 //this fuction find the value max and min for the lignes x and y.
 float[] find_value(float intersection_X, float intersection_Y){
   float value[] = new float[3];
@@ -40,6 +58,13 @@ float[] find_value(float intersection_X, float intersection_Y){
   value[1] = intersection_X - 15;
   
   //value[2] max in Y,  value[3] = Value min in Y
+  if (linearfonction(a, x, b) > linearfonction(a, x, b){
+    
+  }
+  else{
+    
+  }
+  
   //value[2] = 
   //value[3] = 
   
