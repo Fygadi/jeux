@@ -59,11 +59,11 @@ void drawFonction(){
 
 
 float calculateLinearFonction(float x){
-  float a1 = 7, a2 = 0, b1 = -3, b2 = 0;
+  float a1 = 6, a2 = -2, b1 = -4, b2 = 8;
   float y;
-  y = ((a1 * x) + b1);
   x = ((b1-b2)/(a2-a1));
-   //println("x == " + x);
-  //println("y == " + y);
+  y = ((a1 * x) + b1);
+   println("x == " + x);
+  println("y == " + y);
   return y;
 }

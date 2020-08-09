@@ -35,24 +35,28 @@ void entrer(){
 
   
   //#2 calcule les deux valeur de Y pour une droite
-  float y_droite_1[] = new float[2];
   float x_droite_1 = intersection[0];
-  y_droite_1[0] = linearfonction(a1, x_droite_1 - 800, b1);
-  y_droite_1[1] = linearfonction(a1, x_droite_1 + 800, b1);
+  float y_droite_1[] = new float[2];
+  
+  int difference = 800;
+  
+  y_droite_1[0] = linearfonction(a1, x_droite_1 - difference, b1);
+  y_droite_1[1] = linearfonction(a1, x_droite_1 + difference, b1);
  
   draw_line(x_droite_1 - 800, y_droite_1[0],
             x_droite_1 + 800, y_droite_1[1],
             1);
   
-  
-  float y_droite_2[] = new float[2];
   float x_droite_2 = intersection[0];
+  float y_droite_2[] = new float[2];
   y_droite_2[0] = linearfonction(a2, x_droite_2 - 800, b2);
   y_droite_2[1] = linearfonction(a2, x_droite_2 + 800, b2); 
 
   draw_line(x_droite_2 - 800, y_droite_2[0],
             x_droite_2 + 800, y_droite_2[1],
             2);
+  //#3 Find value max for X and Y
+  find_value_max(x_droite_1, x_droite_2, y_droite_1, y_droite_2);
 }
 
 
@@ -94,11 +98,6 @@ void draw_line(float x1, float y1,float x2,float y2, int couleur){
 
 
 
-void draw_position_line(){
-}
-
-
-
 float[] Position_intersection(){
   float intersection[] = new float[2];
   
@@ -117,7 +116,48 @@ float linearfonction(float a, float x, float b){
 
 
 
-float convert(float number){
+float[] find_value_max(float x_droite_1[],float x_droite_2[], float y_droite_1[], float y_droite_2[]){
+  
+      //max value X
+    float value_max_x = x_droite_1[0];
+    if(y_droite_1[1] > value_max_x){
+      value_max_x = x_droite_1[1];
+    }
+  
+    if(x_droite_2[0] > value_max_x){
+      value_max_x = y_droite_2[0];
+    }
+    
+    if(y_droite_2[1] > value_max_x){
+      value_max_x = x_droite_2[1];
+  }
+  
+    //max value Y
+    float value_max_Y = y_droite_1[0];
+    if(y_droite_1[1] > value_max_Y){
+      value_max_Y = y_droite_1[1];
+    }
+  
+    if(y_droite_2[0] > value_max_Y){
+      value_max_Y = y_droite_2[0];
+    }
+    
+    if(y_droite_2[1] > value_max_Y){
+      value_max_Y = y_droite_2[1];
+  }
+  
+  
+  float max_value[] = new float[2];
+  max_value[0] = value_max_x;
+  max_value[1] = value_max_Y;
+ 
+         
+  return max_value;
+}
+
+
+
+float[] convert(float number[]){
   
   return number;
 }
