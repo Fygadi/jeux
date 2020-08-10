@@ -1,6 +1,6 @@
 SnakeClass Snake;
 
-boolean pause = true;
+boolean gameOver = false;
 
 void setup(){
   fullScreen();
@@ -14,15 +14,11 @@ void setup(){
 }
 
 
-void draw(){
-  if(pause == false){
-  Snake.GameOver();
-  }
-  
-  if(pause == false){
-  Snake.SnakeMovement();
-  Snake.SnakePosition();
-  Snake.DrawClassSnake();
+void draw(){ 
+  if(gameOver == false){
+    Snake.DrawClassSnake();
+    Snake.SnakeMovement();
+    Snake.SnakePosition();
   }
 }
 
@@ -39,20 +35,19 @@ public class SnakeClass{
   //headPosition[0] is for X
   //headPosition[1] is for Y
   
-  private int sizeCorp = 5;
+  private int sizeCorp = 20;
   private int[] snakeX = new int[sizeCorp];
   private int[] snakeY = new int[sizeCorp];
   
   
-  public SnakeClass(int _nombreCasesX, int _nombreCasesY)
-  {
+  public SnakeClass(int _nombreCasesX, int _nombreCasesY){
     nombreCasesX = _nombreCasesX;
     nombreCasesY = _nombreCasesY;
   }
   
   
   
-    void InitialisationVariable(){    
+  void InitialisationVariable(){
     //snake spawn position
     snakeX[0] = (int) random(2, nombreCasesX-3);
     snakeY[0] = (int) random(2, nombreCasesY-3);
@@ -68,7 +63,7 @@ public class SnakeClass{
     background(0);
     Snake.DrawClassSnake();
     
-    pause = true;
+    gameOver = false;
   }
   
   
@@ -90,10 +85,14 @@ public class SnakeClass{
   
   
   void SnakeMovement(){
+    int nextPositonX = snakeX[0] + (1 * direction[0]);
+    int nextPositonY = snakeY[0] + (1 * direction[1]);
+    if(GameOver(nextPositonX, nextPositonY) == false){
     //[0] = X
     //[1] = Y
-    snakeX[0] = snakeX[0]+1 * direction[0];
-    snakeY[0] = snakeY[0]+1 * direction[1];
+    snakeX[0] = nextPositonX;
+    snakeY[0] = nextPositonY;
+    }
   }
   
   
@@ -124,21 +123,23 @@ public class SnakeClass{
   
   
   
-   void GameOver(){
-     if(Snake.snakeX[0] == 0|| Snake.snakeX[0] == Snake.nombreCasesX-1){
-         pause = true;
-       }
-    if(Snake.snakeY[0] == 0 || Snake.snakeY[0] == Snake.nombreCasesY-1){
-      pause = true;
+  boolean GameOver(int nextPositionX, int nextPositionY){
+    boolean accepted = false;
+    //check if the snake is going out of the screen
+    if(nextPositionX < 0 || nextPositionX > nombreCasesX || 
+    nextPositionY < 0 || nextPositionY > nombreCasesY){
+      accepted = false;
+      gameOver = true;
     }
+    return accepted;
   }
 }
 
 
 
-void Rules(){
+//void Rules(){
   
-}
+//}
 
 
 
@@ -149,11 +150,11 @@ void keyPressed(){
   }
   
   if(key == 'p' || key == 'P'){
-    if(pause == false){
-      pause = true;
+    if(gameOver == false){
+      gameOver = true;
     }
     else{
-      pause = false;
+      gameOver = false;
     }
   }
   
@@ -163,10 +164,6 @@ void keyPressed(){
     Snake.direction[0] = 0;
     
     Snake.fonction_JSP();
-    
-    if(pause == true){
-      pause = false;
-    }
 }
 
   if(key == 'a' || key == 'A' || keyCode == LEFT){
@@ -174,10 +171,6 @@ void keyPressed(){
     Snake.direction[1] = 0;
     
     Snake.fonction_JSP();
-    
-    if(pause == true){
-      pause = false;
-    }
   }
   
   if(key == 's' || key == 'S' || keyCode == DOWN){
@@ -185,10 +178,6 @@ void keyPressed(){
     Snake.direction[0] = 0;
     
     Snake.fonction_JSP();
-    
-    if(pause == true){
-      pause = false;
-    }
   }
   
   if(key == 'd' || key == 'D' || keyCode == RIGHT){
@@ -196,9 +185,5 @@ void keyPressed(){
     Snake.direction[1] = 0;
     
     Snake.fonction_JSP();
-    
-    if(pause == true){
-      pause = false;
-    }
   }
 }
