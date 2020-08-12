@@ -8,7 +8,7 @@ boolean gameOver = false;
 void setup(){
   fullScreen();
   background(0);
-  frameRate(22);
+  frameRate(8);
   rectMode(CENTER);
   
   Snake = new SnakeClass(width/30, height/30);
@@ -39,13 +39,19 @@ public class SnakeClass{
   private int nombreCasesX;
   private int nombreCasesY;
   
-  //Variable direction is change fi key pressed
+  //This variables contain the position of the snake
+  private ArrayList<Integer> snakeX = new ArrayList<Integer>();
+  private ArrayList<Integer> snakeY = new ArrayList<Integer>();
+  
+  //This variables is change if key pressed and it's use when the fonction SnakeMovement() is call
   private int directionX;
   private int directionY;
   
+  //This is the variable contain the coordone of the food/yellow point
+  private int foodPositionX;
+  private int foodPositionY;
+  
   private boolean alonger = false;
-  private ArrayList<Integer> snakeX = new ArrayList<Integer>();
-  private ArrayList<Integer> snakeY = new ArrayList<Integer>();
   
   public SnakeClass(int _nombreCasesX, int _nombreCasesY){
     nombreCasesX = _nombreCasesX;
@@ -152,7 +158,13 @@ public class SnakeClass{
   
   
   void SpawnFood(){
+    int nombreCasesVide = (nombreCasesX * nombreCasesY) - snakeX.size();
+    int nombreRandom = (int)random(0, nombreCasesVide);
     
+    
+    for(int i = 0; i < nombreCasesVide; i++){
+      
+    }
   }
   
   
