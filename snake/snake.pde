@@ -2,13 +2,14 @@ import java.util.ArrayList  ;
 
 SnakeClass Snake;
 
+//he is set to true when the game is over
 boolean gameOver = false;
 
 
 void setup(){
   fullScreen();
   background(0);
-  frameRate(8);
+  frameRate(25);
   rectMode(CENTER);
   
   Snake = new SnakeClass(width/30, height/30);
@@ -21,13 +22,11 @@ void draw(){
   if(gameOver == false){
     Snake.SnakeMovement();
     
-    //for(int i = 0; i< Snake.nombreCasesX; i++){
-    //  for(int j = 0; j< Snake.nombreCasesY; j++){
-    //    noFill();
-    //    stroke(255);
-    //////    square((i * Snake.sizeCase) + (Snake.sizeCase/2), (j * Snake.sizeCase) + (Snake.sizeCase/2), Snake.sizeCase);
-    ////  }
-    //}
+    if(Snake.snakeX.get(0) == Snake.foodPositionX &&
+       Snake.snakeY.get(0) == Snake.foodPositionY){
+         Snake.SpawnFood(); 
+         Snake.alonger = true;
+    }
   }
 }
 
@@ -73,6 +72,7 @@ public class SnakeClass{
     
     background(0);
     Snake.DrawSnake();
+    Snake.SpawnFood(); 
     
     gameOver = false;
   }
@@ -84,13 +84,15 @@ public class SnakeClass{
       if(i == 0){
         //Draw the head of the snake
         noStroke();
-        fill(90, 170, 255);
+        //fill(90, 170, 255);
+        fill(255);
         square((snakeX.get(i) * sizeCase) + (sizeCase/2), (snakeY.get(i) * sizeCase) + (sizeCase/2), sizeCase);
       }
       else{
         //Draw the Corp of the snake
+        //colorMode(HSB);
         noStroke();
-        fill(0, 0, 75);
+        fill((i*30)%359, 255, (i*30*i)%99);
         square((snakeX.get(i) * sizeCase) + (sizeCase/2), (snakeY.get(i) * sizeCase) + (sizeCase/2), sizeCase);
       }
     }
@@ -119,7 +121,6 @@ public class SnakeClass{
   
   
   void SnakePosition(int newPositionX,int newPositionY){
-        
     //shift the array list
     snakeX.add(0, newPositionX);
     snakeY.add(0, newPositionY);
@@ -137,34 +138,31 @@ public class SnakeClass{
     fill(0, 0, 0);
     square((LastPositionX * sizeCase) + (sizeCase/2), (LastPositionY * sizeCase) + (sizeCase/2), sizeCase);
    }
-
    alonger = false;
-
   }
   
   
   
   void fonction_JSP(){
-    int headPositionX;
-    int headPositionY;
+    //int headPositionX;
+    //int headPositionY;
     
-    headPositionX = Snake.snakeX.get(0)+1 * Snake.directionX;
-    headPositionY = Snake.snakeY.get(0)+1 * Snake.directionY;
-    noStroke();
-    fill(255, 0, 0);
-    square((headPositionX * Snake.sizeCase) + (Snake.sizeCase/2), (headPositionY * Snake.sizeCase) + (Snake.sizeCase/2), Snake.sizeCase);
+    //headPositionX = Snake.snakeX.get(0)+1 * Snake.directionX;
+    //headPositionY = Snake.snakeY.get(0)+1 * Snake.directionY;
+    //noStroke();
+    //fill(255, 0, 0);
+    //square((headPositionX * Snake.sizeCase) + (Snake.sizeCase/2), (headPositionY * Snake.sizeCase) + (Snake.sizeCase/2), Snake.sizeCase);
   }
   
   
   
   void SpawnFood(){
-    int nombreCasesVide = (nombreCasesX * nombreCasesY) - snakeX.size();
-    int nombreRandom = (int)random(0, nombreCasesVide);
-    
-    
-    for(int i = 0; i < nombreCasesVide; i++){
-      
-    }
+    foodPositionX = (int)random(0, nombreCasesX-1);
+    foodPositionY = (int)random(0, nombreCasesY-1);
+  
+    noStroke();
+    fill(255, 255, 0);
+    square((foodPositionX * Snake.sizeCase) + (Snake.sizeCase/2), (foodPositionY * Snake.sizeCase) + (Snake.sizeCase/2), Snake.sizeCase);
   }
   
   
@@ -187,21 +185,113 @@ public class SnakeClass{
     }
     return accepted;
   }
+  
+  
+  
+  int CalculNextPosition(int actualPosition, int direction){
+    int nextPosition = actualPosition + (1 * direction);
+    
+    return nextPosition;
+  }
 }
-
-
 
 //void Rules(){
   
 //}
 
 
-
 void keyPressed(){
+  boolean changeDirection = false;
+  int tempDirectionX = 0;
+  int tempDirectionY = 0;
+  
+  //Control snake
+  if(key == 'w' || key == 'W' || keyCode == UP){
+    tempDirectionX = 0;
+    tempDirectionY = -1;
+    if(Snake.snakeX.size() > 1){
+      if(Snake.CalculNextPosition(Snake.snakeY.get(0), tempDirectionY) != Snake.snakeY.get(1)){
+        
+        Snake.directionX = tempDirectionX;
+        Snake.directionY = tempDirectionY;
+        changeDirection = true;
+      }
+    }
+    else{
+      changeDirection = true;
+    }
+    if(changeDirection == true){
+      Snake.directionX = tempDirectionX;
+      Snake.directionY = tempDirectionY;
+    }
+  }
+  
+  if(key == 'a' || key == 'A' || keyCode == UP){
+    tempDirectionX = -1;
+    tempDirectionY = 0;
+    if(Snake.snakeX.size() > 1){
+      if(Snake.CalculNextPosition(Snake.snakeY.get(0), tempDirectionY) != Snake.snakeY.get(1)){
+        
+        Snake.directionX = tempDirectionX;
+        Snake.directionY = tempDirectionY;
+        changeDirection = true;
+       }
+     }
+     else{
+      changeDirection = true;
+    }
+    if(changeDirection == true){
+      Snake.directionX = tempDirectionX;
+      Snake.directionY = tempDirectionY;
+    }
+  }
+  
+  if(key == 's' || key == 'S' || keyCode == UP){
+    tempDirectionX = 0;
+    tempDirectionY = 1;
+    if(Snake.snakeX.size() > 1){
+      if(Snake.CalculNextPosition(Snake.snakeY.get(0), tempDirectionY) != Snake.snakeY.get(1)){
+        
+        Snake.directionX = tempDirectionX;
+        Snake.directionY = tempDirectionY;
+        changeDirection = true;
+       }
+     }
+     else{
+      changeDirection = true;
+    }
+    if(changeDirection == true){
+      Snake.directionX = tempDirectionX;
+      Snake.directionY = tempDirectionY;
+    }
+  }
+  
+  if(key == 'd' || key == 'D' || keyCode == UP){
+    tempDirectionX = 1;
+    tempDirectionY = 0;
+    if(Snake.snakeX.size() > 1){
+      if(Snake.CalculNextPosition(Snake.snakeY.get(0), tempDirectionY) != Snake.snakeY.get(1)){
+        
+        Snake.directionX = tempDirectionX;
+        Snake.directionY = tempDirectionY;
+        changeDirection = true;
+       }
+     }
+     else{
+      changeDirection = true;
+    }
+    if(changeDirection == true){
+      Snake.directionX = tempDirectionX;
+      Snake.directionY = tempDirectionY;
+    }
+  }
+  
+  
   if(key == 'r' || key == 'R')
   {
     Snake.InitialisationVariable();
   }
+  
   if(key == 'p' || key == 'P'){
     if(gameOver == false){
       gameOver = true;
@@ -211,34 +301,8 @@ void keyPressed(){
     }
   }
   
-  //Control
-  if(key == 'w' || key == 'W' || keyCode == UP){
-    Snake.directionX = 0;
-    Snake.directionY = -1;
-    
-    Snake.fonction_JSP();
-  }
-  if(key == 'a' || key == 'A' || keyCode == LEFT){
-    Snake.directionX = -1;
-    Snake.directionY = 0;
-    
-    Snake.fonction_JSP();
-  }
-  if(key == 's' || key == 'S' || keyCode == DOWN){
-    Snake.directionX = 0;
-    Snake.directionY = 1;
-    
-    Snake.fonction_JSP();
-  }
-  if(key == 'd' || key == 'D' || keyCode == RIGHT){
-    Snake.directionX = 1;
-    Snake.directionY = 0;
-    
-    Snake.fonction_JSP();
-  }
-  
   if(key == 'q' || key == 'Q'){
-    if (Snake.snakeX.size() >= 1){
+    if (Snake.snakeX.size() > 1){
       Snake.snakeX.remove(Snake.snakeX.size()-1);
       Snake.snakeY.remove(Snake.snakeY.size()-1);
     }
