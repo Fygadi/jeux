@@ -131,10 +131,10 @@ void JsonOptionFile() {
   
    JSONObject jsonKey = new JSONObject();
    jsonKey=json.getJSONObject("key");
-   up_G = jsonKey.getString("up").toCharArray()[0];
-   left_G = jsonKey.getString("left").toCharArray()[0];
-   down_G = jsonKey.getString("down").toCharArray()[0];
-   right_G = jsonKey.getString("right").toCharArray()[0];
+   up_G = jsonKey.getString("up").toLowerCase().toCharArray()[0];
+   left_G = jsonKey.getString("left").toLowerCase().toCharArray()[0];
+   down_G = jsonKey.getString("down").toLowerCase().toCharArray()[0];
+   right_G = jsonKey.getString("right").toLowerCase().toCharArray()[0];
    
    JSONObject jsonAuther = new JSONObject();
    jsonAuther=json.getJSONObject("Auther");
@@ -152,10 +152,10 @@ void JsonOptionFile() {
     json.setJSONObject("Screen", jsonScreen);
 
     JSONObject jsonKey = new JSONObject();
-    jsonKey.setString("up", Character.toString(up_G));
-    jsonKey.setString("left", Character.toString(left_G));
-    jsonKey.setString("down", Character.toString(down_G));
-    jsonKey.setString("right", Character.toString(right_G));
+    jsonKey.setString("up", Character.toString(up_G).toLowerCase());
+    jsonKey.setString("left", Character.toString(left_G).toLowerCase());
+    jsonKey.setString("down", Character.toString(down_G).toLowerCase());
+    jsonKey.setString("right", Character.toString(right_G).toLowerCase());
     json.setJSONObject("key", jsonKey);
     
     JSONObject jsonAuther = new JSONObject();
