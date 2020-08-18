@@ -1,24 +1,33 @@
 import java.util.ArrayList;
 
+//Create class
 SnakeClass Snake;
 PersistantVariable simultaneKey = new PersistantVariable();
 EasterEgg Egg = new EasterEgg();
+ JsonFile File = new JsonFile();
 
 enum GameState {
-    SPLASH_SCREEN,
-    IN_GAME,
-    GAME_OVER
+  LOAD_SPLASH_SCREEN,
+  SPLASH_SCREEN,
+  IN_GAME,
+  GAME_OVER,
+  SCOR_BOARD
 }
-GameState gameState = GameState.SPLASH_SCREEN;
+GameState gameState = GameState.LOAD_SPLASH_SCREEN;
 
 
 //parametre
+//Screen
 boolean fullScreen_G = true;
-int ScreenSizeX_G = 800;
-int ScreenSizeY_G = 800;
+int screenSizeX_G = 800;
+int screenSizeY_G = 800;
 
+//Auther
 int sizeCases_G = (int)((1920/100)*1.6);
+
+//Snake
 int SnakeSpeed_G = 15;
+int magnificationSpeed = 1;
 
 //Control
 char up_G = 'w';
@@ -34,7 +43,7 @@ void settings(){
     fullScreen(1);
   }
   else{
-    size(ScreenSizeX_G, ScreenSizeY_G);
+    size(screenSizeX_G, screenSizeY_G);
   }
 }
 
@@ -54,37 +63,35 @@ void setup(){
   float sizeCaseY = ((float)height / nombresCasesY);
 
   Snake = new SnakeClass(nombresCasesX, nombresCasesY, sizeCaseX, sizeCaseY);
-  
-  //drawSplashScreen
-  PImage splashScreen = loadImage("data/Image/SplashScreen/SplashScreen.png");
-  splashScreen.resize(ScreenSizeY_G, ScreenSizeY_G);
-  
-  imageMode(CENTER);
-  image(splashScreen, width/2, height/2);
-  
-  
   Snake.gameOver = false;
-  
 }
 
 
 
 void draw(){
   switch (gameState){
+    case LOAD_SPLASH_SCREEN:{
+      DrawSplashScreen();
+      gameState = GameState.SPLASH_SCREEN;
+    }
     case SPLASH_SCREEN:{
       cursor();
-      SplashScreen();
+      if(keyPressed == true || mousePressed == true){
+        Snake.InitialisationVariable();
+        gameState = GameState.IN_GAME;
+  }
       break;
     }
     case IN_GAME:{
       if(Snake.gameOver == false){
         noCursor();
         Snake.SnakeMovement();
+        Snake.DrawSnake();
         
-        //if snake eat food
+        //checkif snake eat food
         if(Snake.snakeX.get(0) == Snake.foodPositionX && Snake.snakeY.get(0) == Snake.foodPositionY){
           Snake.SpawnFood(); 
-          Snake.alonger = true;
+          Snake.Alonger();
         }
       }
       if(simultaneKey.EASTER_EGG_KEY_ALT == true && simultaneKey.EASTER_EGG_KEY_V == true){
@@ -96,7 +103,11 @@ void draw(){
     }
     case GAME_OVER:{
       GameOver();
+      gameState = GameState.SCOR_BOARD;
       cursor();
+      break;
+    }
+    case SCOR_BOARD:{
       break;
     }
   }
@@ -104,7 +115,9 @@ void draw(){
 
 
 
-
+public class JsonFile{
+  
+}
 void JsonOptionFile() {
   try{
   JSONObject json;
@@ -113,8 +126,8 @@ void JsonOptionFile() {
    JSONObject jsonScreen = new JSONObject();
    jsonScreen=json.getJSONObject("Screen");
    fullScreen_G = jsonScreen.getBoolean("FullScreen");
-   ScreenSizeX_G = jsonScreen.getInt("SizeX");
-   ScreenSizeX_G = jsonScreen.getInt("SizeY");
+   //ScreenSizeX_G = jsonScreen.getInt("SizeX");
+   //ScreenSizeY_G = jsonScreen.getInt("SizeY");
   
    JSONObject jsonKey = new JSONObject();
    jsonKey=json.getJSONObject("key");
@@ -134,8 +147,8 @@ void JsonOptionFile() {
 
     JSONObject jsonScreen = new JSONObject();
     jsonScreen.setBoolean("FullScreen", fullScreen_G);
-    jsonScreen.setInt("SizeX", ScreenSizeX_G);
-    jsonScreen.setInt("SizeY", ScreenSizeY_G);
+    //jsonScreen.setInt("SizeX", ScreenSizeX_G);
+    //jsonScreen.setInt("SizeY", ScreenSizeY_G);
     json.setJSONObject("Screen", jsonScreen);
 
     JSONObject jsonKey = new JSONObject();
@@ -175,8 +188,6 @@ private class SnakeClass{
   //This is the variable contain the coordone of the food/yellow point
   private int foodPositionX;
   private int foodPositionY;
-  
-  private boolean alonger = false;
   
   public SnakeClass(int _nombreCasesX, int _nombreCasesY, float _sizeCaseX, float _sizeCaseY){
     nombreCasesX = _nombreCasesX-1;
@@ -243,7 +254,6 @@ private class SnakeClass{
     }
     if(GameOver(nextPositonX, nextPositonY) == true){
       SnakePosition(nextPositonX, nextPositonY);
-      Snake.DrawSnake();
     }
     else{
       gameState = GameState.GAME_OVER;
@@ -257,8 +267,6 @@ private class SnakeClass{
     snakeX.add(0, newPositionX);
     snakeY.add(0, newPositionY);
     
-   if (alonger == false)
-   {
     int LastPositionX = snakeX.get(snakeX.size()-1);
     int LastPositionY = snakeY.get(snakeX.size()-1);
 
@@ -269,8 +277,15 @@ private class SnakeClass{
     stroke(0);
     fill(0);
     rect((LastPositionX * sizeCaseX) + (sizeCaseX/2), (LastPositionY * sizeCaseY) + (sizeCaseY/2), sizeCaseX, sizeCaseY);
-   }
-   alonger = false;
+  }
+  
+  
+  
+  void Alonger(){
+    for(int i = 0; i < magnificationSpeed; i++){
+      Snake.snakeX.add(Snake.snakeX.size(), -1);
+      Snake.snakeY.add(Snake.snakeY.size(), -1);
+    }
   }
   
   
@@ -322,31 +337,7 @@ private class SnakeClass{
 
 
 
-public class PersistantVariable{
-  public boolean EASTER_EGG_KEY_ALT = false;
-  public boolean EASTER_EGG_KEY_V = false;
-}
-
-
-
-void SplashScreen(){
-  if(keyPressed == true || mousePressed == true){
-    Snake.InitialisationVariable();
-    gameState = GameState.IN_GAME;
-  }
-}
-
-
-
-void GameOver(){
-  textAlign(CENTER);
-  textSize(height/6);
-  fill(255, 0, 0);
-  text("Game over", width/2, height/2);
-}
-
-
-private class EasterEgg{
+public class EasterEgg{
   void CreateurName(){
     PImage easter_egg = loadImage("data/Image/EasterEgg/CreateurName.png");
     if(width > height){
@@ -362,14 +353,37 @@ private class EasterEgg{
 
 
 
+public class PersistantVariable{
+  public boolean EASTER_EGG_KEY_ALT = false;
+  public boolean EASTER_EGG_KEY_V = false;
+}
+
+void DrawSplashScreen(){
+  //drawSplashScreen
+  PImage splashScreen = loadImage("data/Image/SplashScreen/SplashScreen.png");
+  splashScreen.resize((height/4)*3, (height/4)*3);
+  imageMode(CENTER);
+  image(splashScreen, width/2, height/2);
+}
+
+
+
+void GameOver(){
+  textAlign(CENTER);
+  textSize(height/6);
+  fill(255, 0, 0);
+  text("Game over", width/2, height/2);
+}
+
+
+
 void keyPressed(){
   boolean changeDirection = false;
   int tempDirectionX = 0;
   int tempDirectionY = 0;
   
-  
   //Control snake
-  if(key == up_G || keyCode == UP){
+  if(key == up_G || key == Character.toString(up_G).toUpperCase().toCharArray()[0] || key == CODED &&  keyCode == UP){
     tempDirectionX = 0;
     tempDirectionY = -1;
     if(Snake.snakeX.size() > 1){
@@ -388,8 +402,7 @@ void keyPressed(){
       Snake.directionY = tempDirectionY;
     }
   }
-  
-  if(key == left_G || keyCode == LEFT){
+  else if(key == left_G || key == Character.toString(left_G).toUpperCase().toCharArray()[0] || key == CODED && keyCode == LEFT){
     tempDirectionX = -1;
     tempDirectionY = 0;
     if(Snake.snakeX.size() > 1){
@@ -407,9 +420,7 @@ void keyPressed(){
       Snake.directionX = tempDirectionX;
       Snake.directionY = tempDirectionY;
     }
-  }
-  
-  if(key == down_G || keyCode == DOWN){
+  }else if(key == down_G || key == Character.toString(down_G).toUpperCase().toCharArray()[0] || key == CODED && keyCode == DOWN){
     tempDirectionX = 0;
     tempDirectionY = 1;
     if(Snake.snakeX.size() > 1){
@@ -427,9 +438,7 @@ void keyPressed(){
       Snake.directionX = tempDirectionX;
       Snake.directionY = tempDirectionY;
     }
-  }
-  
-  if(key == right_G || keyCode == RIGHT){
+  }else if(key == right_G || key == Character.toString(right_G).toUpperCase().toCharArray()[0] || key == CODED && keyCode == RIGHT){
     tempDirectionX = 1;
     tempDirectionY = 0;
     if(Snake.snakeX.size() > 1){
@@ -447,42 +456,28 @@ void keyPressed(){
       Snake.directionX = tempDirectionX;
       Snake.directionY = tempDirectionY;
     }
-  }
-  
-  
-  if(key == 'r' || key == 'R')
-  {
-    if(gameState == GameState.IN_GAME || gameState == GameState.GAME_OVER){
+  }else if(key == 'r' || key == 'R'){
+    if(gameState == GameState.IN_GAME || gameState == GameState.SCOR_BOARD){
       Snake.InitialisationVariable();
     }
-  }
-  
-  if(key == 'p' || key == 'P'){
+  }else if(key == 'p' || key == 'P'){
     if(Snake.gameOver == false){
       Snake.gameOver = true;
     }
     else{
       Snake.gameOver = false;
     }
-  }
-  
-  if(key == 'q' || key == 'Q'){
+  }else if(key == 'q' || key == 'Q'){
     if (Snake.snakeX.size() > 1){
       Snake.snakeX.remove(Snake.snakeX.size()-1);
       Snake.snakeY.remove(Snake.snakeY.size()-1);
     }
-  }
-  
-  if(key == 'e' || key == 'E'){
+  }else if(key == 'e' || key == 'E'){
     Snake.snakeX.add(Snake.snakeX.size(), -1);
     Snake.snakeY.add(Snake.snakeY.size(), -1);
-  }
-  
-  if(keyCode == ALT){
+  }else if(keyCode == ALT){
     simultaneKey.EASTER_EGG_KEY_ALT = true; //<>//
-  }
-  
-  if(key == 'v'){
+  }else if(key == 'v'){
     simultaneKey.EASTER_EGG_KEY_V = true; //<>//
     println("key v = " + simultaneKey.EASTER_EGG_KEY_V);
   }
@@ -494,9 +489,7 @@ void keyReleased(){
   if(keyCode == ALT){
     simultaneKey.EASTER_EGG_KEY_ALT = false;
     println("key alt = " + simultaneKey.EASTER_EGG_KEY_ALT);
-  }
-  
-  if(key == 'v'){
+  }else if(key == 'v'){
     simultaneKey.EASTER_EGG_KEY_V = false;
     println("key v = " + simultaneKey.EASTER_EGG_KEY_V);
   }

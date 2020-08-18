@@ -1,0 +1,13 @@
+{
+  "Screen": {"FullScreen": true},
+  "Auther": {
+    "SnakeSpeed": 26,
+    "sizeCases": 30
+  },
+  "key": {
+    "left": "a",
+    "up": "w",
+    "right": "d",
+    "down": "s"
+  }
+}
