@@ -11,7 +11,7 @@ enum GameState {
   SPLASH_SCREEN,
   IN_GAME,
   GAME_OVER,
-  SCOR_BOARD
+  SCOREBOARD
 }
 GameState gameState = GameState.LOAD_SPLASH_SCREEN;
 
@@ -27,7 +27,7 @@ int sizeCases_G = (int)((1920/100)*1.6);
 
 //Snake
 int SnakeSpeed_G = 15;
-int magnificationSpeed = 1;
+int magnificationSpeed_G = 1;
 
 //Control
 char up_G = 'w';
@@ -38,7 +38,7 @@ char right_G = 'd';
 
 
 void settings(){
-  JsonOptionFile();
+  File.Option();
   if(fullScreen_G == true){
     fullScreen(1);
   }
@@ -88,13 +88,16 @@ void draw(){
         Snake.SnakeMovement();
         Snake.DrawSnake();
         
-        //checkif snake eat food
-        if(Snake.snakeX.get(0) == Snake.foodPositionX && Snake.snakeY.get(0) == Snake.foodPositionY){
+        //check if snake eat food
+        if(Snake.snakeX.get(0) == Snake.foodPositionX && 
+           Snake.snakeY.get(0) == Snake.foodPositionY){
+          Snake.numberFoodEat = ++Snake.numberFoodEat;
           Snake.SpawnFood(); 
           Snake.Alonger();
         }
       }
-      if(simultaneKey.EASTER_EGG_KEY_ALT == true && simultaneKey.EASTER_EGG_KEY_V == true){
+      if(simultaneKey.EASTER_EGG_KEY_ALT == true && 
+         simultaneKey.EASTER_EGG_KEY_V == true){
         Egg.CreateurName();
         simultaneKey.EASTER_EGG_KEY_ALT = false;
         simultaneKey.EASTER_EGG_KEY_V = false;
@@ -102,12 +105,13 @@ void draw(){
       break;
     }
     case GAME_OVER:{
-      GameOver();
-      gameState = GameState.SCOR_BOARD;
       cursor();
+      GameOver();
+      File.Score();
+      gameState = GameState.SCOREBOARD;
       break;
     }
-    case SCOR_BOARD:{
+    case SCOREBOARD:{
       break;
     }
   }
@@ -115,55 +119,77 @@ void draw(){
 
 
 
-public class JsonFile{
+private class JsonFile{
+  void Option() {
+    try{
+    JSONObject json;
+    json = loadJSONObject("optionSnake.json");
   
-}
-void JsonOptionFile() {
-  try{
-  JSONObject json;
-  json = loadJSONObject("optionSnake.json");
-
-   JSONObject jsonScreen = new JSONObject();
-   jsonScreen=json.getJSONObject("Screen");
-   fullScreen_G = jsonScreen.getBoolean("FullScreen");
-   //ScreenSizeX_G = jsonScreen.getInt("SizeX");
-   //ScreenSizeY_G = jsonScreen.getInt("SizeY");
+     JSONObject jsonScreen = new JSONObject();
+     jsonScreen = json.getJSONObject("Screen");
+     fullScreen_G = jsonScreen.getBoolean("FullScreen");
+     screenSizeX_G = Math.abs(jsonScreen.getInt("SizeX"));
+     screenSizeY_G = Math.abs(jsonScreen.getInt("SizeY"));
+    
+     JSONObject jsonKey = new JSONObject();
+     jsonKey = json.getJSONObject("key");
+     up_G = jsonKey.getString("up").toLowerCase().toCharArray()[0];
+     left_G = jsonKey.getString("left").toLowerCase().toCharArray()[0];
+     down_G = jsonKey.getString("down").toLowerCase().toCharArray()[0];
+     right_G = jsonKey.getString("right").toLowerCase().toCharArray()[0];
+     
+     JSONObject jsonAuther = new JSONObject();
+     jsonAuther = json.getJSONObject("Auther");
+     SnakeSpeed_G = Math.abs(jsonAuther.getInt("Snake Speed", SnakeSpeed_G));
+     sizeCases_G = Math.abs(jsonAuther.getInt("sizeCases", sizeCases_G));
+     
+     JSONObject jsonSnake = new JSONObject();
+     jsonSnake = json.getJSONObject("Snake");
+     magnificationSpeed_G = Math.abs(jsonSnake.getInt("Snake speed magnification", magnificationSpeed_G));
+  }
+    catch(Exception e){
+      println("Ereur = " + e);
+      JSONObject json = new JSONObject();
   
-   JSONObject jsonKey = new JSONObject();
-   jsonKey=json.getJSONObject("key");
-   up_G = jsonKey.getString("up").toLowerCase().toCharArray()[0];
-   left_G = jsonKey.getString("left").toLowerCase().toCharArray()[0];
-   down_G = jsonKey.getString("down").toLowerCase().toCharArray()[0];
-   right_G = jsonKey.getString("right").toLowerCase().toCharArray()[0];
-   
-   JSONObject jsonAuther = new JSONObject();
-   jsonAuther=json.getJSONObject("Auther");
-   SnakeSpeed_G = jsonAuther.getInt("SnakeSpeed", SnakeSpeed_G);
-   sizeCases_G = jsonAuther.getInt("sizeCases", sizeCases_G);
-}
-  catch(Exception e){
-    println("Ereur = " + e);
-    JSONObject json = new JSONObject();
-
-    JSONObject jsonScreen = new JSONObject();
-    jsonScreen.setBoolean("FullScreen", fullScreen_G);
-    //jsonScreen.setInt("SizeX", ScreenSizeX_G);
-    //jsonScreen.setInt("SizeY", ScreenSizeY_G);
-    json.setJSONObject("Screen", jsonScreen);
-
-    JSONObject jsonKey = new JSONObject();
-    jsonKey.setString("up", Character.toString(up_G).toLowerCase());
-    jsonKey.setString("left", Character.toString(left_G).toLowerCase());
-    jsonKey.setString("down", Character.toString(down_G).toLowerCase());
-    jsonKey.setString("right", Character.toString(right_G).toLowerCase());
-    json.setJSONObject("key", jsonKey);
-    
-    JSONObject jsonAuther = new JSONObject();
-    jsonAuther.setInt("SnakeSpeed", SnakeSpeed_G);
-    jsonAuther.setInt("sizeCases", sizeCases_G);
-    json.setJSONObject("Auther", jsonAuther);
-    
-    saveJSONObject(json,"optionSnake.json");
+      JSONObject jsonScreen = new JSONObject();
+      jsonScreen.setBoolean("FullScreen", fullScreen_G);
+      jsonScreen.setInt("SizeX", Math.abs(screenSizeX_G));
+      jsonScreen.setInt("SizeY", Math.abs(screenSizeY_G));
+      json.setJSONObject("Screen", jsonScreen);
+  
+      JSONObject jsonKey = new JSONObject();
+      jsonKey.setString("up", Character.toString(up_G).toLowerCase());
+      jsonKey.setString("left", Character.toString(left_G).toLowerCase());
+      jsonKey.setString("down", Character.toString(down_G).toLowerCase());
+      jsonKey.setString("right", Character.toString(right_G).toLowerCase());
+      json.setJSONObject("key", jsonKey);
+      
+      JSONObject jsonAuther = new JSONObject();
+      jsonAuther.setInt("sizeCases", Math.abs(sizeCases_G));
+      json.setJSONObject("Auther", jsonAuther);
+      
+      JSONObject jsonSnake = new JSONObject();
+      jsonSnake.setInt("SnakeSpeed", Math.abs(SnakeSpeed_G));
+      jsonSnake.setInt("Snake speed magnification", Math.abs(magnificationSpeed_G));
+      json.setJSONObject("Snake", jsonSnake);
+      
+      saveJSONObject(json,"optionSnake.json");
+    }
+  }
+  
+  
+  
+  void Score(){
+    JSONObject json;
+    json = loadJSONObject("optionSnake.json");
+    try{
+      json = loadJSONObject("Scoreboard.json");
+    }
+    catch(Exception e){
+      JSONObject json = new JSONObject();
+      
+      saveJSONObject(json,"optionSnake.json");
+    }
   }
 }
 
@@ -188,6 +214,7 @@ private class SnakeClass{
   //This is the variable contain the coordone of the food/yellow point
   private int foodPositionX;
   private int foodPositionY;
+  private int numberFoodEat = 0;
   
   public SnakeClass(int _nombreCasesX, int _nombreCasesY, float _sizeCaseX, float _sizeCaseY){
     nombreCasesX = _nombreCasesX-1;
@@ -282,7 +309,7 @@ private class SnakeClass{
   
   
   void Alonger(){
-    for(int i = 0; i < magnificationSpeed; i++){
+    for(int i = 0; i < magnificationSpeed_G; i++){
       Snake.snakeX.add(Snake.snakeX.size(), -1);
       Snake.snakeY.add(Snake.snakeY.size(), -1);
     }
@@ -457,7 +484,7 @@ void keyPressed(){
       Snake.directionY = tempDirectionY;
     }
   }else if(key == 'r' || key == 'R'){
-    if(gameState == GameState.IN_GAME || gameState == GameState.SCOR_BOARD){
+    if(gameState == GameState.IN_GAME || gameState == GameState.SCOREBOARD){
       Snake.InitialisationVariable();
     }
   }else if(key == 'p' || key == 'P'){
@@ -479,7 +506,6 @@ void keyPressed(){
     simultaneKey.EASTER_EGG_KEY_ALT = true; //<>//
   }else if(key == 'v'){
     simultaneKey.EASTER_EGG_KEY_V = true; //<>//
-    println("key v = " + simultaneKey.EASTER_EGG_KEY_V);
   }
 }
 
@@ -488,9 +514,7 @@ void keyPressed(){
 void keyReleased(){
   if(keyCode == ALT){
     simultaneKey.EASTER_EGG_KEY_ALT = false;
-    println("key alt = " + simultaneKey.EASTER_EGG_KEY_ALT);
   }else if(key == 'v'){
     simultaneKey.EASTER_EGG_KEY_V = false;
-    println("key v = " + simultaneKey.EASTER_EGG_KEY_V);
   }
 }
