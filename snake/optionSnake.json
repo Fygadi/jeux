@@ -1,9 +1,14 @@
 {
-  "Screen": {"FullScreen": true},
-  "Auther": {
-    "SnakeSpeed": 26,
-    "sizeCases": 30
+  "Snake": {
+    "Snake Speed": 22,
+    "Snake speed magnification": 1
   },
+  "Screen": {
+    "SizeX": 800,
+    "SizeY": 800,
+    "FullScreen": true
+  },
+  "Auther": {"sizeCases": 30},
   "key": {
     "left": "a",
     "up": "w",

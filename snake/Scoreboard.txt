@@ -1,0 +1,10 @@
+        Game 1
+
+Food eats = 1
+Snake size = 2
+--------------------------
+        Game 2
+
+Food eats = 0
+Snake size = 1
+--------------------------
