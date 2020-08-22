@@ -1,11 +1,5 @@
 import java.util.ArrayList;
 
-//import java.io.File;
-//import java.io.FileWriter;
-//import java.io.IOException;
-//import java.util.Scanner;
-//import java.io.FileNotFoundException;
-import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.Paths;
@@ -20,8 +14,8 @@ enum GameState {
   LOAD_SPLASH_SCREEN,
   SPLASH_SCREEN,
   IN_GAME,
-  GAME_OVER,
-  SCOREBOARD
+  LOAD_GAME_OVER,
+  GAME_OVER
 }
 GameState gameState = GameState.LOAD_SPLASH_SCREEN;
 
@@ -37,7 +31,7 @@ int sizeCases_G = (int)((1920/100)*1.6);
 
 //Snake
 boolean SpawnSnakeAtRandomPosition = false;
-int SnakeSpeed_G = 22;
+int SnakeSpeed_G = 20;
 int SnakeMagnificationSpeed_G = 1;
 
 //Control
@@ -61,7 +55,7 @@ void settings(){
 
 
 void setup(){
-  frameRate(SnakeSpeed_G);
+  frameRate(60);
   
   background(0);
   rectMode(CENTER);
@@ -90,13 +84,15 @@ void draw(){
       if(keyPressed == true || mousePressed == true){
         Snake.InitialisationVariable();
         gameState = GameState.IN_GAME;
-  }
+        frameRate(SnakeSpeed_G);
+        noCursor();
+      }
       break;
     }
     case IN_GAME:{
       if(Snake.gameOver == false){
-        noCursor();
         Snake.SnakeMovement();
+         Snake.DrawScore(true, false);
         Snake.DrawSnake();
         
         //check if snake eat food
@@ -107,6 +103,7 @@ void draw(){
           Snake.Alonger();
         }
       }
+      
       if(simultaneKey.EASTER_EGG_KEY_ALT == true && 
          simultaneKey.EASTER_EGG_KEY_V == true){
         Egg.CreateurName();
@@ -115,17 +112,18 @@ void draw(){
       }
       break;
     }
-    case GAME_OVER:{
+    case LOAD_GAME_OVER:{
       cursor();
-      //GameOver();
-      scoreboardImage();
+      //scoreboardImage();
+      GameOver();
+      Snake.DrawScore(false, true);
       File.jsonGameNumber();
       File.txtScore();
-      gameState = GameState.SCOREBOARD;
+      gameState = GameState.GAME_OVER;
       
       break;
     }
-    case SCOREBOARD:{
+    case GAME_OVER:{
       break;
     }
   }
@@ -285,6 +283,8 @@ private class SnakeClass{
     Snake.directionX = 0;
     Snake.directionY = 0;
     
+    numberFoodEat = 0;
+    
     background(0);
     Snake.DrawSnake();
     Snake.SpawnFood();
@@ -300,13 +300,11 @@ private class SnakeClass{
       if(i == 0){
         //Draw the head of the snake
         noStroke();
-        //fill(90, 170, 255);
         fill(255);
         rect((snakeX.get(i) * sizeCaseX) + (sizeCaseX/2), (snakeY.get(i) * sizeCaseY) + (sizeCaseY/2), sizeCaseX, sizeCaseY);
       }
       else{
         //Draw the Corp of the snake
-        //colorMode(HSB);
         noStroke();
         fill((i*30)%359, 255, (i*30*i)%99);
         rect((snakeX.get(i) * sizeCaseX) + (sizeCaseX/2), (snakeY.get(i) * sizeCaseY) + (sizeCaseY/2), sizeCaseX, sizeCaseY);
@@ -320,34 +318,34 @@ private class SnakeClass{
     int nextPositonX = CalculNextPosition(snakeX.get(0), directionX);
     int nextPositonY = CalculNextPosition(snakeY.get(0), directionY);;
     
-    if ((snakeX.size() > 0) && 
-    (nextPositonX == snakeX.get(0)) && 
-    (nextPositonY == snakeY.get(0))){
-          
-
-    }
     if(GameOver(nextPositonX, nextPositonY) == true){
+      //if next position of the head is accepted
+      //change the position of the head
       SnakePosition(nextPositonX, nextPositonY);
     }
     else{
-      gameState = GameState.GAME_OVER;
+      //if the next position of the head is not accepted
+      //change the statue of the game
+      gameState = GameState.LOAD_GAME_OVER;
     }
   }
   
   
   
   void SnakePosition(int newPositionX,int newPositionY){
-    //shift the array list
+    //save the last positon of the snake
+    int LastPositionX = snakeX.get(snakeX.size()-1);
+    int LastPositionY = snakeY.get(snakeX.size()-1);
+    
+    //shift the array
+    // add the new position of the head at the begening and remove the last position of the snake
     snakeX.add(0, newPositionX);
     snakeY.add(0, newPositionY);
     
-    int LastPositionX = snakeX.get(snakeX.size()-1);
-    int LastPositionY = snakeY.get(snakeX.size()-1);
-
     snakeX.remove(snakeX.size()-1);
     snakeY.remove(snakeY.size()-1);
     
-    //remove la trainer du snake
+    //draw the case behind the snake in black to remove the trainer
     stroke(0);
     fill(0);
     rect((LastPositionX * sizeCaseX) + (sizeCaseX/2), (LastPositionY * sizeCaseY) + (sizeCaseY/2), sizeCaseX, sizeCaseY);
@@ -374,12 +372,34 @@ private class SnakeClass{
            SpawnFood();
       }
     }
+    DrawScore(true, true);
+    
     //drawfood
     noStroke();
     fill(255, 255, 0);
     rect((foodPositionX * Snake.sizeCaseX) + (Snake.sizeCaseX/2), (foodPositionY * Snake.sizeCaseY) + (Snake.sizeCaseY/2), Snake.sizeCaseX, sizeCaseY);
   }
   
+  
+  
+  void DrawScore(boolean writeText, boolean removeText){
+    float size_text = width/30;
+    //draw score
+    textAlign(LEFT, TOP);
+    
+    if(removeText == true){
+      if(numberFoodEat != 0){
+        int digitsNumber = Integer.toString(numberFoodEat).length();
+        fill(0);
+        rect(0 + (size_text/2), 0 + (size_text/2), digitsNumber * size_text + (size_text/2), size_text + (size_text/2));
+      }
+    }
+    if(writeText == true){
+      fill(255);
+      textSize(size_text);
+      text(numberFoodEat, 0 + ((width/100) * 0.7), 0 + ((height/100) * 0.6));
+    }
+  }
   
   
   boolean GameOver(int nextPositionX, int nextPositionY){
@@ -452,23 +472,11 @@ void DrawSplashScreen(){
 void GameOver(){
   textAlign(CENTER);
   textSize(height/6);
-  fill(255, 0, 0);
-  text("Game over", width/2, height/2);
-}
-
-
-
-void scoreboardImage(){
-  PImage Scoreboard = loadImage("data/Image/ScorBoard/Scorboard test.png");
-  if(width > height){
-    Scoreboard.resize((height/4)*3, (height/4)*3);
-  }
-  else{
-  Scoreboard.resize((width/4)*3, (width/4)*3);
-  }
-  background(0);
-  imageMode(CENTER);
-  image(Scoreboard, width/2, height/2);
+  fill(255, 0, 0);  
+  text("Game over", width/2, height/2 - height/12);
+  fill(255);
+  textSize(height/12);
+  text("Score: " + Snake.numberFoodEat, width/2, height/2 + height/8);
 }
 
 
@@ -553,7 +561,7 @@ void keyPressed(){
       Snake.directionY = tempDirectionY;
     }
   }else if(key == 'r' || key == 'R'){
-    if(gameState == GameState.IN_GAME || gameState == GameState.SCOREBOARD){
+    if(gameState == GameState.IN_GAME || gameState == GameState.GAME_OVER){
       Snake.InitialisationVariable();
     }
   }else if(key == 'p' || key == 'P'){
@@ -567,10 +575,12 @@ void keyPressed(){
     if (Snake.snakeX.size() > 1){
       Snake.snakeX.remove(Snake.snakeX.size()-1);
       Snake.snakeY.remove(Snake.snakeY.size()-1);
+      Snake.numberFoodEat = --Snake.numberFoodEat;
     }
   }else if(key == 'e' || key == 'E'){
     Snake.snakeX.add(Snake.snakeX.size(), -1);
     Snake.snakeY.add(Snake.snakeY.size(), -1);
+    Snake.numberFoodEat = ++Snake.numberFoodEat;
   }else if(keyCode == ALT){
     simultaneKey.EASTER_EGG_KEY_ALT = true;
   }else if(key == 'v'){
@@ -587,10 +597,3 @@ void keyReleased(){
     simultaneKey.EASTER_EGG_KEY_V = false;
   }
 }
-
-
-
-
-//void mousePressed(){
-//  println("Position mouse = " + mouseX + ", " + mouseY);
-//}
