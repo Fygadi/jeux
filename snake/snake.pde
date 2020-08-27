@@ -13,6 +13,7 @@ EasterEgg Egg = new EasterEgg();
 enum GameState {
   LOAD_SPLASH_SCREEN,
   SPLASH_SCREEN,
+  LOAD_IN_GAME,
   IN_GAME,
   LOAD_GAME_OVER,
   GAME_OVER
@@ -55,7 +56,7 @@ void settings(){
 
 
 void setup(){
-  frameRate(60);
+  frameRate(120);
   
   background(0);
   rectMode(CENTER);
@@ -78,12 +79,21 @@ void draw(){
     case LOAD_SPLASH_SCREEN:{
       DrawSplashScreen();
       gameState = GameState.SPLASH_SCREEN;
+      break;
     }
     case SPLASH_SCREEN:{
       cursor();
       if(keyPressed == true || mousePressed == true){
         Snake.InitialisationVariable();
+        gameState = GameState.LOAD_IN_GAME;
+        }
+        break;
+      }
+      case LOAD_IN_GAME:{
+        if(Snake.directionX !=0 || Snake.directionY != 0){
+        Snake.gameTime = millis();
         gameState = GameState.IN_GAME;
+        
         frameRate(SnakeSpeed_G);
         noCursor();
       }
@@ -99,7 +109,7 @@ void draw(){
         if(Snake.snakeX.get(0) == Snake.foodPositionX && 
            Snake.snakeY.get(0) == Snake.foodPositionY){
           Snake.numberFoodEat = ++Snake.numberFoodEat;
-          Snake.SpawnFood(); 
+          Snake.SpawnFood(true, true); 
           Snake.Alonger();
         }
       }
@@ -117,13 +127,15 @@ void draw(){
       //scoreboardImage();
       GameOver();
       Snake.DrawScore(false, true);
+      Snake.SpawnFood(false, true);
+      Snake.DrawSnake();
       File.jsonGameNumber();
       File.txtScore();
-      gameState = GameState.GAME_OVER;
-      
+      gameState = GameState.GAME_OVER;      
       break;
     }
     case GAME_OVER:{
+      
       break;
     }
   }
@@ -135,7 +147,7 @@ private class JsonFile{
   void JsonOption() {
     try{
       JSONObject json;
-      json = loadJSONObject("optionSnake.json");
+      json = loadJSONObject(sketchPath() + "/optionSnake.json");
       
       JSONObject jsonScreen = new JSONObject();
       jsonScreen = json.getJSONObject("Screen");
@@ -156,11 +168,10 @@ private class JsonFile{
       
       JSONObject jsonSnake = new JSONObject();
       jsonSnake = json.getJSONObject("Snake");
-      SnakeSpeed_G = Math.abs(jsonAuther.getInt("Snake Speed", SnakeSpeed_G));
-      SnakeMagnificationSpeed_G = Math.abs(jsonSnake.getInt("Snake speed magnification", SnakeMagnificationSpeed_G));
+      SnakeSpeed_G = Math.abs(jsonAuther.getInt("Speed", SnakeSpeed_G));
+      SnakeMagnificationSpeed_G = Math.abs(jsonSnake.getInt("speed magnification", SnakeMagnificationSpeed_G));
     }
     catch(Exception e){
-      println("Ereur = " + e);
       JSONObject json = new JSONObject();
       
       JSONObject jsonScreen = new JSONObject();
@@ -181,11 +192,11 @@ private class JsonFile{
       json.setJSONObject("Auther", jsonAuther);
       
       JSONObject jsonSnake = new JSONObject();
-      jsonSnake.setInt("Snake Speed", Math.abs(SnakeSpeed_G));
-      jsonSnake.setInt("Snake speed magnification", Math.abs(SnakeMagnificationSpeed_G));
+      jsonSnake.setInt("Speed", Math.abs(SnakeSpeed_G));
+      jsonSnake.setInt("speed magnification", Math.abs(SnakeMagnificationSpeed_G));
       json.setJSONObject("Snake", jsonSnake);
       
-      saveJSONObject(json,"optionSnake.json");
+      saveJSONObject(json, sketchPath() + "/optionSnake.json");
     }
   }
   
@@ -194,17 +205,18 @@ private class JsonFile{
   void jsonGameNumber(){
     try{
       JSONObject json;
-      json = loadJSONObject("data/GameNumber.json");
+      json = loadJSONObject(sketchPath() + "/data/GameNumber.json");
       
-      int tempGameNumber = json.getInt("GameNumber");
       
-      json.setInt("GameNumber", ++tempGameNumber);
-      saveJSONObject(json,"data/GameNumber.json");
+      int tempGameNumber = json.getInt("/GameNumber");
+      
+      json.setInt("GameNumber: ", (tempGameNumber + 1));
+      saveJSONObject(json, sketchPath() + "/data/GameNumber.json");
     } catch(Exception e){
       try{
         JSONObject json = new JSONObject();
         json.setInt("GameNumber", 1);
-        saveJSONObject(json,"data/GameNumber.json");
+        saveJSONObject(json, sketchPath() + "/data/GameNumber.json");
       } catch(Exception i){
         
       }
@@ -215,44 +227,46 @@ private class JsonFile{
 
   void txtScore(){
     try{
-      Files.createFile(Paths.get("C:/Users/victor/Documents/GitHub/jeux/snake/Scoreboard.txt"));
+      Files.createFile(Paths.get(sketchPath() + "/ScoreBoard.txt"));
       
       //set the value of the game nuber to 0
       JSONObject json = new JSONObject();
       json.setInt("GameNumber", 1);
-      saveJSONObject(json,"data/GameNumber.json");
+      saveJSONObject(json, sketchPath() + "/data/GameNumber.json");
     } catch (IOException e) {
       
     }
     
     try{
       JSONObject json;
-      json = loadJSONObject("data/GameNumber.json");
+      json = loadJSONObject(sketchPath() + "/data/GameNumber.json");
       
-      String tempTxt = "        Game " + json.getInt("GameNumber") + "\n\nFood eats = " + Snake.numberFoodEat + "\nSnake size = " + Snake.snakeX.size() + "\n--------------------------\n";
+      String tempTxt = "        Game " + json.getInt("GameNumber") + "\n\nFood eats: " + Snake.numberFoodEat + "\nTime play: " + Snake.snakeX.size()  +" Secondes" + "\n--------------------------\n";
       //String tmpText = "\nPoint = " + Snake.numberFoodEat + "\n";
-      Files.write(Paths.get("C:/Users/victor/Documents/GitHub/jeux/snake/Scoreboard.txt"), tempTxt.getBytes(),  StandardOpenOption.APPEND);
+      Files.write(Paths.get(sketchPath() + "/ScoreBoard.txt"), tempTxt.getBytes(),  StandardOpenOption.APPEND);
     } catch (IOException e) {
       
-    } //<>// //<>// //<>//
+    } //<>//
   }
 }
 
 
 
 private class SnakeClass{
-  //variable to draw snake
   boolean gameOver = false;
+  int gameTime = 0;
+  
+  //variable to draw snake
   private float sizeCaseX;
   private float sizeCaseY;
   private int nombreCasesX;
   private int nombreCasesY;
   
-  //This variables contain the position of the snake
+  //This variables contain the actuel position of the snake
   private ArrayList<Integer> snakeX = new ArrayList<Integer>();
   private ArrayList<Integer> snakeY = new ArrayList<Integer>();
   
-  //This variables is change if key pressed and it's use when the fonction SnakeMovement() is call
+  //This variables is change if keyMove is pressed and it's use when the fonction SnakeMovement() is call
   private int directionX;
   private int directionY;
   
@@ -287,10 +301,9 @@ private class SnakeClass{
     
     background(0);
     Snake.DrawSnake();
-    Snake.SpawnFood();
+    Snake.SpawnFood(true, true);
     gameOver = false;
-    
-    gameState = GameState.IN_GAME;
+    gameState = GameState.LOAD_IN_GAME;
   }
   
   
@@ -362,22 +375,28 @@ private class SnakeClass{
   
   
   
-  void SpawnFood(){
-    //set the position of the food
-    foodPositionX = (int)random(0, nombreCasesX-1);
-    foodPositionY = (int)random(0, nombreCasesY-1);
-    for(int i = 0; i < snakeX.size(); i ++){
-      if(foodPositionX == snakeX.get(i) && 
-         foodPositionY == snakeY.get(i)){
-           SpawnFood();
+  void SpawnFood(boolean newFoodPosition, boolean drawFood){
+    if(newFoodPosition == true){
+      //set the position of the food
+      foodPositionX = (int)random(0, nombreCasesX-1);
+      foodPositionY = (int)random(0, nombreCasesY-1);
+      for(int i = 0; i < snakeX.size(); i ++){
+        if(foodPositionX == snakeX.get(i) && 
+           foodPositionY == snakeY.get(i)){
+          SpawnFood(true, false);
+         }
+         else{
+           DrawScore(true, true);
+         }
       }
     }
-    DrawScore(true, true);
     
-    //drawfood
-    noStroke();
-    fill(255, 255, 0);
-    rect((foodPositionX * Snake.sizeCaseX) + (Snake.sizeCaseX/2), (foodPositionY * Snake.sizeCaseY) + (Snake.sizeCaseY/2), Snake.sizeCaseX, sizeCaseY);
+    if(drawFood == true){
+      //drawfood
+      noStroke();
+      fill(255, 255, 0);
+      rect((foodPositionX * Snake.sizeCaseX) + (Snake.sizeCaseX/2), (foodPositionY * Snake.sizeCaseY) + (Snake.sizeCaseY/2), Snake.sizeCaseX, sizeCaseY);
+    }
   }
   
   
@@ -433,7 +452,7 @@ private class SnakeClass{
 
 public class EasterEgg{
   void CreateurName(){
-    PImage easter_egg = loadImage("data/Image/EasterEgg/CreateurName.png");
+    PImage easter_egg = loadImage("/data/Image/EasterEgg/CreateurName.png");
     if(width > height){
       easter_egg.resize(width/8, (int)((width/8) / 2.4));
     }
@@ -456,7 +475,7 @@ public class PersistantVariable{
 
 void DrawSplashScreen(){
   //drawSplashScreen
-  PImage splashScreen = loadImage("data/Image/SplashScreen/SplashScreen.png");
+  PImage splashScreen = loadImage(sketchPath() + "/data/Image/SplashScreen/SplashScreen.png");
   if(width > height){
     splashScreen.resize((height/4)*3, (height/4)*3);
   }
@@ -473,10 +492,10 @@ void GameOver(){
   textAlign(CENTER);
   textSize(height/6);
   fill(255, 0, 0);  
-  text("Game over", width/2, height/2 - height/12);
+  text("Game over\n", width/2, height/2 - height/12);
   fill(255);
-  textSize(height/12);
-  text("Score: " + Snake.numberFoodEat, width/2, height/2 + height/8);
+  textSize(height/16);
+  text("Time play: " + ((int)(millis() - Snake.gameTime)/1000) + " Secondes" + "\nScore: " + Snake.numberFoodEat, width/2, height/2 + height/32);
 }
 
 
@@ -563,6 +582,7 @@ void keyPressed(){
   }else if(key == 'r' || key == 'R'){
     if(gameState == GameState.IN_GAME || gameState == GameState.GAME_OVER){
       Snake.InitialisationVariable();
+      gameState = GameState.LOAD_IN_GAME;
     }
   }else if(key == 'p' || key == 'P'){
     if(Snake.gameOver == false){

@@ -1,7 +1,7 @@
 {
   "Snake": {
-    "Snake Speed": 22,
-    "Snake speed magnification": 1
+    "Speed": 20,
+    "speed magnification": 1
   },
   "Screen": {
     "SizeX": 800,
