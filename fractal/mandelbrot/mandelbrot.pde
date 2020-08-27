@@ -38,8 +38,7 @@ void setup()
           //  break;
           //}
         }
-        stroke(c);
-        point(posX,posY);
+        set(posX,posY, c);
         //println("posX=" + posX + "  PosY= " + posY);
       }
     } //<>//
