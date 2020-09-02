@@ -1,40 +1,51 @@
-int number_iteration_G = 10;
+import java.util.ArrayList;
+import javafx.util.Pair;
 
 void setup(){
-  size(800, 800);
-  background(0);
+  
 }
 
-private class MandelBrot {
-  float real;
-  float imaginair;
+public class Complex {
+  float r, i;
+
+  public Complex()
+  {
+    r = 0;
+    i = 0;
+  }
   
+  public Complex(float _r, float _i)
+  {
+    r = _r;
+    i = _i;
+  }
   
-  int Pixel_position(int x, int y) {
-    int pixel_position;
-    //convert the position (x, y) to a number (1, nuber_pixel)
-    pixel_position = x + ((y * width) - width);
-    return pixel_position;
+  public float getR() {return r;}
+  public float getI() {return i;}
+
+  public void setR(float _r) {r = _r;}
+  public void setI(float _i) {i = _i;}
+}
+  
+  public class ComplexOperation{
+
+  Complex Adition(Complex number1, Complex number2){
+    Complex resultat;
+    
+    //adition real with real\
+    resultat.setR(number1.getR() + number2.getR()); 
+    resultat.setI(number1.getI() + number2.getI()); 
+    
+    return resultat_bug;
+    
+    
+    
+    Complex Multiplication();
   }
   
   
-  void mandelbrot(float c) {
-    
-    float new_Zn = 0;
-    float Zn = 0;
-    
-    new_Zn = (Zn * Zn) + c;
-  }
   
-  
-  float Complex(float r, float i) {
+  void Multiply(){
     
-    int x; int y;
-    x = 8;
-    y = 5i;
-    
-    
-    
-    return (r + i);
   }
 }
