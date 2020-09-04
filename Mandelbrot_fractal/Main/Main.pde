@@ -1,10 +1,10 @@
-int g_Max_iteration = 1000; //<>//
+int g_Max_iteration = 300; //<>//
 
 
-float g_x1 = -2.1;
+float g_x1 = -2.2;
 float g_x2 = 1;
-float g_y1 = -1;
-float g_y2 = 1;
+float g_y1 = -1.6;
+float g_y2 = 1.6;
 
 Mandelbrot_zoom mandelbrot_zoom = new Mandelbrot_zoom();
 
@@ -39,23 +39,22 @@ void draw() {
 void pixelColor(int iteration, int max_iteration, int x, int y){
   color c = 255 - (iteration * 255 / max_iteration);
   pixels[(x + (y * width))] = color(c, c, c);
-  //println("(" + x + ", " + y + ")" + "   couleur = " + c);
 }
 
 
 
-//void mousePressed() {
-//  mandelbrot_zoom.zoom_x1 = (mandelbrot_zoom.zoom_x1 + ((float)mouseX / width) * (mandelbrot_zoom.zoom_x2 - mandelbrot_zoom.zoom_x1));
-//  mandelbrot_zoom.zoom_y1 = (mandelbrot_zoom.zoom_y1 + ((float)mouseY / height) * (mandelbrot_zoom.zoom_y2 - mandelbrot_zoom.zoom_y1));
-//}
+void mousePressed() {
+  mandelbrot_zoom.zoom_x1 = (mandelbrot_zoom.zoom_x1 + ((float)mouseX / width) * (mandelbrot_zoom.zoom_x2 - mandelbrot_zoom.zoom_x1));
+  mandelbrot_zoom.zoom_y1 = (mandelbrot_zoom.zoom_y1 + ((float)mouseY / height) * (mandelbrot_zoom.zoom_y2 - mandelbrot_zoom.zoom_y1));
+}
 
 
 
-//void mouseReleased(){
-//  mandelbrot_zoom.zoom_x2 = (mandelbrot_zoom.zoom_x1 + ((float)mouseX / width) * (mandelbrot_zoom.zoom_x2 - mandelbrot_zoom.zoom_x1));
-//  mandelbrot_zoom.zoom_y2 = (mandelbrot_zoom.zoom_y1 + ((float)mouseY / height) * (mandelbrot_zoom.zoom_y2 - mandelbrot_zoom.zoom_y1));
-//  redraw();
-//}
+void mouseReleased(){
+  mandelbrot_zoom.zoom_x2 = (mandelbrot_zoom.zoom_x1 + ((float)mouseX / width) * (mandelbrot_zoom.zoom_x2 - mandelbrot_zoom.zoom_x1));
+  mandelbrot_zoom.zoom_y2 = (mandelbrot_zoom.zoom_y1 + (mandelbrot_zoom.zoom_x2 - mandelbrot_zoom.zoom_x1));
+  redraw();
+}
 
 
 
