@@ -11,7 +11,7 @@ public class Mandelbrot { //<>//
     //while module of Zn < 2
     //2 * 2 = 4
     int i = 0;
-    while (i < nb_iteration && ((Zn.getR() * Zn.getR()) + (Zn.getI() * Zn.getI())) < 4){
+    while (i < nb_iteration && ( abs(Zn.getR() * Zn.getR()) + (Zn.getI() * Zn.getI())) < 4){
       //calcule Zn+1 = (Zn * Zn) + C
       Zn = dummy.Addition(dummy.Squar(Zn), c);
       i++;

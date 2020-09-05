@@ -1,4 +1,4 @@
-int g_Max_iteration = 300; //<>//
+int g_Max_iteration = 44; //<>//
 
 
 float g_x1 = -2.2;
@@ -10,9 +10,11 @@ Mandelbrot_zoom mandelbrot_zoom = new Mandelbrot_zoom();
 
 void setup() {
   noLoop();
-  size(800, 800);
+  size(4000, 4000);
   //fullScreen();
-  background(0);
+  background(255, 255, 255);
+  
+  //splashScreen();
 }
 
 
@@ -31,14 +33,41 @@ void draw() {
     }
   }
   updatePixels();
-  //saveFrame("mandelbrot.png");
+  saveFrame("mandelbrot 16k  .png");
 }
 
 
 
 void pixelColor(int iteration, int max_iteration, int x, int y){
+  
+  //int hue = int(255 * iteration / max_iteration);
+  //int saturation = 255;
+  //int value;
+  //if (iteration < max_iteration)
+  //  value = 255;
+  //else 
+  //  value = 0;
+  
+  //pixels[(x + (y * width))] = color(hue, value, saturation);
+  
+  //color white and black
   color c = 255 - (iteration * 255 / max_iteration);
   pixels[(x + (y * width))] = color(c, c, c);
+}
+
+
+void splashScreen() {
+  PImage splashScreen;
+    splashScreen = loadImage(sketchPath() + "/data/loading_screen.png");
+    
+    if(width > height) {
+      splashScreen.resize(height/4, height);
+    }
+    else {
+    splashScreen.resize(width, width);
+    }
+    imageMode(CENTER);
+    image(splashScreen, width/2, height/2);
 }
 
 
