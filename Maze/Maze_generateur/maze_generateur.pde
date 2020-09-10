@@ -25,7 +25,8 @@ int nb_G = 1;
 void settings(){
   int nombreCases = mazeSize_G;
   int sizeCase = (displayHeight * 1)/mazeSize_G;
-  size((nombreCases * sizeCase), (nombreCases * sizeCase));
+  //size((nombreCases * sizeCase), (nombreCases * sizeCase));
+  fullScreen();
 }
 
 
@@ -33,7 +34,6 @@ void settings(){
 
 void setup(){
   frameRate(120);
-  //fullScreen(3);
   background(#282828);
   
   rectMode(CENTER);
