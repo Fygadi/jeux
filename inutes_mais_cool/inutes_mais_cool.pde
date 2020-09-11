@@ -5,15 +5,16 @@ void setup(){
 
 
 void select_pixel(){
+  color c;
   for(int i = 0; i < width; i++){
     for(int j = 0; j < height; j++){
     
-      println("i == " + i);
-      println("j == " + j);
+      //println("i == " + i);
+      //println("j == " + j);
       
       colorMode(HSB);
-      stroke(((i*j) %360), i%width, j%height);
-      point(i, j);
+      c = color(((i*j) %360), i%width, j%height);
+      set(i, j, c);
     }
   }
 }
