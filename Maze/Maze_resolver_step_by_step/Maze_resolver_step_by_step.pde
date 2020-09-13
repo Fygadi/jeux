@@ -1,6 +1,6 @@
 import java.util.Arrays; //<>//
 import java.util.ArrayList;
-import javafx.util.Pair; 
+import javafx.util.Pair;
 
 Maze maze;
 Persistant_variable variable = new Persistant_variable();

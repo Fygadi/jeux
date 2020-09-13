@@ -1,50 +1,61 @@
+import java.util.ArrayList;
+import javafx.util.Pair;
+
+//bug 1
+//utiliser une autre matrix a chaque iteration et recopier a la fin d'ans la matrix original
+
 Maladi_simulateur maladi;
 
-//parameter
-int g_fps = 256;
+//parameter interface
+int g_fps = 244;
+int g_sizeCases = 20;
 
-int g_sizeCases = 32;
-
-
-int g_pourcentage_de_vaccines = 2;
-int g_nombre_de_malade = 2;
-int g_mortalite_de_la_maladie = 20;
-int g_contagiositer_de_la_maladie = 15;
-int g_temps_avant_la_mort = 256;
-int g_temps_avant_la_guerison = 128;
+//parametre maladi
+int g_pourcentage_de_vaccines = 43; //covid_19 43%
+int g_nombre_de_malade = 1;
+int g_pourcentage_de_mortalite_de_la_maladie = 3; //covid_19 3%
+int g_contagiositer_de_la_maladie = 6;
+int g_temps_avant_la_mort = 14;
+int g_temps_avant_la_guerison = 10;
+int g_imuniter_time_after_malade = 10;
 
 enum Cellules_types{
   VIVANT,
-  IMUNISER,
+  VACCINER,
   MALADE,
-  MORT
+  MORT,
+  GUERI,
 }
+int iteration = 0;
 
 void setup(){
   frameRate(g_fps);
   fullScreen();
-  
+  //size(3840, 2160);
+  //size(5440, 1920);
   background(0);
   rectMode(CENTER);
   
   //set the size of the case and the number of the cases.
-  int nombresCasesX = ((int)width/g_sizeCases);
-  float sizeCaseX = ((float)width / nombresCasesX);
+  int nombreCasesX = ((int)width/g_sizeCases);
+  float sizeCaseX = ((float)width / nombreCasesX);
 
-  int nombresCasesY = ((int)height/g_sizeCases);
-  float sizeCaseY = ((float)height / nombresCasesY);
+  int nombreCasesY = ((int)height/g_sizeCases);
+  float sizeCaseY = ((float)height / nombreCasesY);
   
-  maladi = new Maladi_simulateur(g_pourcentage_de_vaccines, g_nombre_de_malade, g_mortalite_de_la_maladie, g_contagiositer_de_la_maladie, g_temps_avant_la_mort, g_temps_avant_la_guerison, 
-                                 nombresCasesX, nombresCasesY, sizeCaseX, sizeCaseY);
+  maladi = new Maladi_simulateur(g_pourcentage_de_vaccines, g_nombre_de_malade, g_pourcentage_de_mortalite_de_la_maladie, g_contagiositer_de_la_maladie, g_temps_avant_la_mort, g_temps_avant_la_guerison, g_imuniter_time_after_malade,
+                                 nombreCasesX, nombreCasesY, sizeCaseX, sizeCaseY);
   
   maladi.Population_initialisation();
-  maladi.Draw_cases();
+  maladi.Draw_all_population();
 }
 
 
 
 void draw(){
-  
+  //saveFrame("data/iteration_" + iteration++ + ".png");
+  maladi.rules_all_case();
+  maladi.Draw_all_population();
 }
 
 
@@ -52,6 +63,6 @@ void draw(){
 void keyPressed(){
   if (key == 'r' || key == 'R'){
     maladi.Population_initialisation();
-    maladi.Draw_cases();
+    maladi.Draw_all_population();
   }
 }
