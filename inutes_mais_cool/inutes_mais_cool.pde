@@ -1,10 +1,16 @@
 void setup(){
   fullScreen();
-  select_pixel();
+  setPixel();
 }
 
 
-void select_pixel(){
+
+void draw(){
+  
+}
+
+
+void setPixel(){
   color c;
   for(int i = 0; i < width; i++){
     for(int j = 0; j < height; j++){
