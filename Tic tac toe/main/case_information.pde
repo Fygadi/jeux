@@ -1,3 +1,3 @@
 public class CaseInformation {
-  CaseState state = CaseState.O;
+  CaseState state = CaseState.EMPTY;
 }

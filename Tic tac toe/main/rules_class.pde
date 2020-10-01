@@ -1,6 +1,5 @@
 public class GameRules {
   int sizeBoard;
-  int playeur = 1;
   boolean gameOver = false;
   CaseInformation[][] caseInformation = new CaseInformation[sizeBoard][sizeBoard];
   

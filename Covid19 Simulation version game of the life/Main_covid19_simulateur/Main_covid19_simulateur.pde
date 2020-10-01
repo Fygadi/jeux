@@ -11,13 +11,13 @@ int g_fps = 244;
 int g_sizeCases = 20;
 
 //parametre maladi
-int g_pourcentage_de_vaccines = 43; //covid_19 43%
+int g_pourcentage_de_vaccines =0; //covid_19 43%
 int g_nombre_de_malade = 1;
 int g_pourcentage_de_mortalite_de_la_maladie = 3; //covid_19 3%
 int g_contagiositer_de_la_maladie = 6;
 int g_temps_avant_la_mort = 14;
 int g_temps_avant_la_guerison = 10;
-int g_imuniter_time_after_malade = 10;
+int g_imuniter_time_after_malade = 0;
 
 enum Cellules_types{
   VIVANT,
