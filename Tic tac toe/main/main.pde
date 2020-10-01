@@ -23,14 +23,14 @@ void setup() {
 
 
 void draw() {
-  e
+  
 }
 
 
 
 void initialisation() {
   for (int i = 0; i < nombreGame; i++){
-    game[i].screenConvertor.drawGame(game[i].caseInformation);
+    game[i].screenConvertor.drawGame(game[i].caseInformation, game[i].sizeBoard);
   }
 }
 
@@ -38,11 +38,20 @@ void initialisation() {
 
 void mousePressed() {
   for (int i = 0; i < nombreGame; i++){
-    if (mouseX > game[i].screenConvertor.gamePosX && mouseX < game[i].screenConvertor.gamePosX + (game[i].screenConvertor.gamePosX + game[i].screenConvertor.gameSize) &&
+    if (mouseX > game[i].screenConvertor.gamePosX && mouseX < game[i].screenConvertor.gamePosX + (game[i].screenConvertor.gamePosX + game[i].screenConvertor.gameSize) && 
         mouseY > game[i].screenConvertor.gamePosX && mouseY < game[i].screenConvertor.gamePosX + (game[i].screenConvertor.gamePosY + game[i].screenConvertor.gameSize)){
-     println("click is in the game " + i);
-     break;
+      println("Click on the game " + i);
+      switch (game[i].playeur) {
+        case 1: {
+          game[i].caseInformation[2][2].state = CaseState.O;
+          break;
+        }
+        case 2: {
+          game[i].caseInformation[2][2].state = CaseState.X;
+          break;
+        }
+      }
+      break;
     }
-    println(i);
   }
 }

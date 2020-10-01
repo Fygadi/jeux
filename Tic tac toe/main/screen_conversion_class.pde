@@ -6,22 +6,19 @@ public class ScreenConvertor{
   
   //game information
   float caseSize;
-  int sizeBoard;
   
   CaseInformation[][] caseInformation;
   
-  ScreenConvertor(int tmp_gamePosX, int tmp_gamePosY, int tmp_gameSize, int tmp_sizeBoard){
+  ScreenConvertor(int tmp_gamePosX, int tmp_gamePosY, int tmp_gameSize, int sizeBoard) {
     gamePosX = tmp_gamePosX;
     gamePosY = tmp_gamePosY;
     gameSize = tmp_gameSize;
     
-    sizeBoard = tmp_sizeBoard;
-    
     caseSize = (gameSize / sizeBoard);
     
     caseInformation = new CaseInformation[sizeBoard][sizeBoard];
-    for (int i = 0; i < sizeBoard; i++){
-      for (int j = 0; j < sizeBoard; j++){
+    for (int i = 0; i < sizeBoard; i++) {
+      for (int j = 0; j < sizeBoard; j++) {
         caseInformation[i][j] = new CaseInformation();
       }
     }
@@ -29,7 +26,7 @@ public class ScreenConvertor{
   
   
   
-  void drawGame(CaseInformation[][] tmp_caseInformation) {
+  void drawGame(CaseInformation[][] tmp_caseInformation, int sizeBoard) {
     caseInformation = tmp_caseInformation;
     
     for (int i = 0; i < sizeBoard; i++){
