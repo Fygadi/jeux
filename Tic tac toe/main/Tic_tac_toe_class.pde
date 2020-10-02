@@ -4,7 +4,7 @@ public class TicTacToe {
   boolean gameOver = false;
   CaseInformation[][] caseInformation = new CaseInformation[sizeBoard][sizeBoard];
   
-  GameRules gameRules = new GameRules();
+  GameRules gameRules = new GameRules(sizeBoard);
   ScreenConvertor screenConvertor;
   
   TicTacToe(int screenGamePosX, int screenGamePosY, int screenGameSize) {

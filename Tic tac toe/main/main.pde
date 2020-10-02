@@ -42,33 +42,40 @@ void initialisation() {
 void mousePressed() {
   for (int i = 0; i < nombreGame; i++) {
     if (mouseX > (game[i].screenConvertor.gamePosX) && mouseX < (game[i].screenConvertor.gamePosX + game[i].screenConvertor.gameSize) && 
-        mouseY > (game[i].screenConvertor.gamePosY) && mouseY < (game[i].screenConvertor.gamePosY + game[i].screenConvertor.gameSize)){
-      int caseX = int((mouseX - game[i].screenConvertor.gamePosX) / (game[i].screenConvertor.caseSize));
-      int caseY = int((mouseY - game[i].screenConvertor.gamePosY) / (game[i].screenConvertor.caseSize));      
-      
-      if (game[i].caseInformation[caseX][caseY].state == CaseState.EMPTY) {
-        switch (game[i].playeur) {
-          case 1: {
-            game[i].caseInformation[caseX][caseY].state = CaseState.O;
-            break;
+        mouseY > (game[i].screenConvertor.gamePosY) && mouseY < (game[i].screenConvertor.gamePosY + game[i].screenConvertor.gameSize)) {
+      if (game[i].gameOver == false) {
+        int caseX = int((mouseX - game[i].screenConvertor.gamePosX) / (game[i].screenConvertor.caseSize));
+        int caseY = int((mouseY - game[i].screenConvertor.gamePosY) / (game[i].screenConvertor.caseSize));      
+        
+        if (game[i].caseInformation[caseX][caseY].state == CaseState.EMPTY) {
+          switch (game[i].playeur) {
+            case 1: {
+              game[i].caseInformation[caseX][caseY].state = CaseState.O;
+              break;
+            }
+            case 2: {
+              game[i].caseInformation[caseX][caseY].state = CaseState.X;
+              break;
+            }
           }
-          case 2: {
-            game[i].caseInformation[caseX][caseY].state = CaseState.X;
-            break;
+          game[i].screenConvertor.drawPieces(caseX, caseY, game[i].caseInformation[caseX][caseY].state);
+          if (game[i].playeur == 1){
+            game[i].playeur = 2;
+          }
+          else {
+            game[i].playeur = 1;
           }
         }
-        game[i].screenConvertor.drawPieces(caseX, caseY, game[i].caseInformation[caseX][caseY].state);
-        if (game[i].playeur == 1){
-          game[i].playeur = 2;
+        
+        if (game[i].gameRules.rules(game[i].caseInformation) == true) {
+          game[i].gameOver = true;
+          fill(255, 0, 0);
+          textAlign(CENTER, CENTER);
+          textSize((game[i].screenConvertor.gameSize / 6));
+          text("Game over", (game[i].screenConvertor.gamePosX + (game[i].screenConvertor.gameSize / 2)), (game[i].screenConvertor.gamePosY + (game[i].screenConvertor.gameSize / 2)));
         }
-        else {
-          game[i].playeur = 1;
-        }
+        break;
       }
-      
-      if (game[i].gameRules.rules() == true);
-      game[i].gameOver = true;
-      break;
     }
   }
 }
