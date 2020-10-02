@@ -10,8 +10,8 @@ TicTacToe[] game = new TicTacToe[nombreGame];
 
 void setup() {
   frameRate(144);
-  fullScreen();
-  //size(1200, 800);
+  fullScreen(3);
+  //size(800, 800);
   background(200);
   
   int value = (height / 2) - 10;
@@ -40,31 +40,34 @@ void initialisation() {
 
 
 void mousePressed() {
-  for (int i = 0; i < nombreGame; i++){
-    if (mouseX > (game[i].screenConvertor.gamePosX) && mouseX < (game[i].screenConvertor.gamePosX + game[i].screenConvertor.gameSize) &&  
-        mouseY > (game[i].screenConvertor.gamePosY) && mouseY < (game[i].screenConvertor.gamePosY + game[i].screenConvertor.gamePosY)){
+  for (int i = 0; i < nombreGame; i++) {
+    if (mouseX > (game[i].screenConvertor.gamePosX) && mouseX < (game[i].screenConvertor.gamePosX + game[i].screenConvertor.gameSize) && 
+        mouseY > (game[i].screenConvertor.gamePosY) && mouseY < (game[i].screenConvertor.gamePosY + game[i].screenConvertor.gameSize)){
       int caseX = int((mouseX - game[i].screenConvertor.gamePosX) / (game[i].screenConvertor.caseSize));
-      int caseY = int((mouseY - game[i].screenConvertor.gamePosY) / (game[i].screenConvertor.caseSize));
-      switch (game[i].playeur) {
-        case 1: {
-          game[i].caseInformation[caseX][caseY].state = CaseState.O;
-          break;
-        }
-        case 2: {
-          game[i].caseInformation[caseX][caseY].state = CaseState.X;
-          break;
-        }
-      }
-      println("Click on the game " + i);
-      println("case [" + caseX + "]" + "[" + caseY + "] = " + game[i].caseInformation[caseX][caseY].state);
-      game[i].screenConvertor.drawPieces(caseX, caseY, game[i].caseInformation[caseX][caseY].state);
+      int caseY = int((mouseY - game[i].screenConvertor.gamePosY) / (game[i].screenConvertor.caseSize));      
       
-      if (game[i].playeur == 1){
-        game[i].playeur = 2;
+      if (game[i].caseInformation[caseX][caseY].state == CaseState.EMPTY) {
+        switch (game[i].playeur) {
+          case 1: {
+            game[i].caseInformation[caseX][caseY].state = CaseState.O;
+            break;
+          }
+          case 2: {
+            game[i].caseInformation[caseX][caseY].state = CaseState.X;
+            break;
+          }
+        }
+        game[i].screenConvertor.drawPieces(caseX, caseY, game[i].caseInformation[caseX][caseY].state);
+        if (game[i].playeur == 1){
+          game[i].playeur = 2;
+        }
+        else {
+          game[i].playeur = 1;
+        }
       }
-      else {
-        game[i].playeur = 1;
-      }
+      
+      if (game[i].gameRules.rules() == true);
+      game[i].gameOver = true;
       break;
     }
   }

@@ -14,7 +14,7 @@ public class ScreenConvertor{
     gamePosY = tmp_gamePosY;
     gameSize = tmp_gameSize;
     
-    caseSize = (gameSize / sizeBoard);
+    caseSize = ((float) gameSize / sizeBoard);
     
     caseInformation = new CaseInformation[sizeBoard][sizeBoard];
     for (int i = 0; i < sizeBoard; i++) {
