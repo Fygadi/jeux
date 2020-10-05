@@ -1,0 +1,18 @@
+{
+  "Snake": {
+    "Speed": 150,
+    "speed magnification": 1
+  },
+  "Screen": {
+    "SizeX": 800,
+    "SizeY": 800,
+    "FullScreen": true
+  },
+  "Auther": {"sizeCases": 30},
+  "key": {
+    "left": "a",
+    "up": "w",
+    "right": "d",
+    "down": "s"
+  }
+}

@@ -433,3 +433,8 @@ Time play: 5 Secondes
 Food eats: 0
 Time play: 1 Secondes
 --------------------------
+        Game 1
+
+Food eats: 214
+Time play: 215 Secondes
+--------------------------
