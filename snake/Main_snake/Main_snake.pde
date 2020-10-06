@@ -126,9 +126,10 @@ void draw(){
         //check if snake eat food
         if(Snake.snakeX.get(0) == Snake.foodPositionX && 
            Snake.snakeY.get(0) == Snake.foodPositionY){
+             
+          Snake.Alonger();
           Snake.numberFoodEat = ++Snake.numberFoodEat;
           Snake.SpawnFood(true, true); 
-          Snake.Alonger();
         }
       }
       
@@ -138,6 +139,44 @@ void draw(){
         simultaneKey.EASTER_EGG_KEY_ALT = false;
         simultaneKey.EASTER_EGG_KEY_V = false;
       }
+      
+      
+      if (simultaneKey.automaticMod == true){
+        Snake.directionX = 0;
+        Snake.directionY = 0;
+        // direction ou aller
+        if (Snake.foodPositionX > Snake.snakeX.get(0)){
+          Snake.directionX = 1;
+        }
+        else if (Snake.foodPositionX < Snake.snakeX.get(0)){
+          Snake.directionX = -1;
+        }
+        else
+        { 
+          if (Snake.foodPositionY > Snake.snakeY.get(0)){
+           Snake.directionY = 1;
+          }
+          if (Snake.foodPositionY < Snake.snakeY.get(0)){
+           Snake.directionY = -1;
+          }
+        }
+        
+         if (Snake.snakeX.size() > 1){
+           if ((Snake.directionX !=0) &&(Snake.snakeX.get(0) + Snake.directionX) == Snake.snakeX.get(1)){
+             Snake.directionX = 0;
+             Snake.directionY = 1;
+           }
+         }
+         
+         if (Snake.snakeY.size() > 1){
+           if ((Snake.directionY !=0) &&(Snake.snakeY.get(0) + Snake.directionY) == Snake.snakeY.get(1)){
+             Snake.directionY = 0;
+             Snake.directionX = 1;
+           }
+         }
+      }
+       
+       
       break;
     }
     case LOAD_GAME_OVER:{
@@ -187,6 +226,8 @@ public class EasterEgg{
 public class PersistantVariable{
   public boolean EASTER_EGG_KEY_ALT = false;
   public boolean EASTER_EGG_KEY_V = false;
+  
+  public boolean automaticMod = false;
 }
 
 

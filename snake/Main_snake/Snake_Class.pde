@@ -57,18 +57,24 @@ private class SnakeClass{
   
   
   void DrawSnake(){
-      //Draw the head of the snake
-      noStroke();
-      //fill(255);
-      fill(#1833C6);
-      rect((snakeX.get(0) * sizeCaseX) + (sizeCaseX/2), (snakeY.get(0) * sizeCaseY) + (sizeCaseY/2), sizeCaseX, sizeCaseY);
-      
-      for (int i = 1; i < snakeX.size(); i++){
+    rectMode(CORNER);
+    //Draw the head of the snake
+    noStroke();
+    fill(#1833C6);
+    
+// v1    rect(int(snakeX.get(0) * sizeCaseX), int(snakeY.get(0) * sizeCaseY), int(sizeCaseX), int(sizeCaseY));
+    rect((snakeX.get(0) * sizeCaseX), (snakeY.get(0) * sizeCaseY), (sizeCaseX), (sizeCaseY));
+    
+    
+    for (int i = 1; i < snakeX.size(); i++){
         //Draw the Corp of the snake
         noStroke();
         fill((i*30)%359, 255, (i*30*i)%99);
-        rect((snakeX.get(i) * sizeCaseX) + (sizeCaseX/2), (snakeY.get(i) * sizeCaseY) + (sizeCaseY/2), sizeCaseX+1, sizeCaseY+1);
-    }
+   //v1     rect(int(snakeX.get(i) * sizeCaseX), int(snakeY.get(i) * sizeCaseY), int(sizeCaseX), int(sizeCaseY));
+        rect((snakeX.get(i) * sizeCaseX), (snakeY.get(i) * sizeCaseY), (sizeCaseX), (sizeCaseY));
+        
+  
+}
   }
   
   
@@ -109,8 +115,10 @@ private class SnakeClass{
     //fill(0);
     //rect((LastPositionX * sizeCaseX) + (sizeCaseX/2), (LastPositionY * sizeCaseY) + (sizeCaseY/2), sizeCaseX, sizeCaseY);
     imageMode(CORNER);
-    image(bg, (LastPositionX * sizeCaseX) - 1, (LastPositionY * sizeCaseY) - 1, sizeCaseX + 2, sizeCaseY + 2, 
-              int(LastPositionX * sizeCaseX) - 1, int(LastPositionY * sizeCaseY) - 1, int((LastPositionX * sizeCaseX) + sizeCaseX) + 2, int((LastPositionY * sizeCaseY) + sizeCaseY) + 2);
+    image(bg, (LastPositionX * sizeCaseX)-1, (LastPositionY * sizeCaseY)-1, (sizeCaseX)+3, (sizeCaseY)+3, 
+              int(LastPositionX * sizeCaseX)-1, int(LastPositionY * sizeCaseY)-1, int((LastPositionX * sizeCaseX) + sizeCaseX), int((LastPositionY * sizeCaseY) + sizeCaseY));
+
+    
     SpawnFood(false, true);
   }
   
@@ -126,8 +134,8 @@ private class SnakeClass{
   
   
   void SpawnFood(boolean newFoodPosition, boolean drawFood){
+    //set the new position of the food
     if(newFoodPosition == true){
-      //set the position of the food
       foodPositionX = (int)random(0, nombreCasesX-1);
       foodPositionY = (int)random(0, nombreCasesY-1);
       
@@ -135,21 +143,20 @@ private class SnakeClass{
         if(foodPositionX == snakeX.get(i) && 
            foodPositionY == snakeY.get(i)){
           SpawnFood(true, false);
-         }
-         else{
-           DrawScore(true, true);
-           break;
-         }
+        }
       }
     }
+    DrawScore(true, true);
     
+    //draw food
     if(drawFood == true){
-      //drawfood
-    noStroke();
+      noStroke();
       fill(255, 255, 0);
-      rect((foodPositionX * Snake.sizeCaseX) + (Snake.sizeCaseX/2), (foodPositionY * Snake.sizeCaseY) + (Snake.sizeCaseY/2), Snake.sizeCaseX, sizeCaseY);
+// v1      rect(int(foodPositionX * Snake.sizeCaseX), int(foodPositionY * Snake.sizeCaseY), int(Snake.sizeCaseX), int(sizeCaseY));
+      rect((foodPositionX * Snake.sizeCaseX) +1, (foodPositionY * Snake.sizeCaseY)+1, (Snake.sizeCaseX)-2, (sizeCaseY)-2);
     }
   }
+  
   
   
   void DrawScore(boolean writeText, boolean removeText){

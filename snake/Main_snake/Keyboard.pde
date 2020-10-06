@@ -123,6 +123,11 @@ void keyPressed(){
   else if(key == 'v'){
       simultaneKey.EASTER_EGG_KEY_V = true;
   }
+  else if(key == 'o' || key =='O'){
+    //simultaneKey.automaticMod = !simultaneKey.automaticMod;
+  }
+  
+  
   
   if (key == CODED){
     println("key == keyCode = " + keyCode);
@@ -131,7 +136,7 @@ void keyPressed(){
     }
     else if (keyCode == 113){
       //keyCode = F2
-      saveFrame(sketchPath() + "/Capture d'érand/frame_" + ".png");
+      saveFrame(sketchPath() + "/Capture d'érand/frame_" + random(0, 999999999) + ".png");
     }
   }
 }
