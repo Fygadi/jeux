@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.Paths;
 
+
 PImage bg = new PImage();
 
 //Create class
@@ -18,7 +19,9 @@ enum GameState {
   LOAD_IN_GAME,
   IN_GAME,
   LOAD_GAME_OVER,
-  GAME_OVER
+  GAME_OVER,
+  
+  SETTINGS
 }
 GameState gameState = GameState.LOAD_SPLASH_SCREEN;
 
@@ -194,6 +197,16 @@ void draw(){
     case GAME_OVER:{
       //waiting for playeur pressed key to restart
       break;
+    }
+    case SETTINGS: {
+      update(mouseX, mouseY);
+      //draw brackground (ici)
+      if (button[i].buttonType == RECT){
+        
+      }
+      else if (button[i].buttonType == ELLIPSE){
+        
+      }
     }
   }
 }

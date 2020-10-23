@@ -1,4 +1,4 @@
-private class Chest{
+private class Chest extends rules{
   State[][] board = new State[8][8];
   
   
