@@ -198,16 +198,16 @@ void draw(){
       //waiting for playeur pressed key to restart
       break;
     }
-    case SETTINGS: {
-      update(mouseX, mouseY);
-      //draw brackground (ici)
-      if (button[i].buttonType == RECT){
+    //case SETTINGS: {
+    //  update(mouseX, mouseY);
+    //  //draw brackground (ici)
+    //  if (button[i].buttonType == RECT){
         
-      }
-      else if (button[i].buttonType == ELLIPSE){
+    //  }
+    //  else if (button[i].buttonType == ELLIPSE){
         
-      }
-    }
+    //  }
+    //}
   }
 }
 
